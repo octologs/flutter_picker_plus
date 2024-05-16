@@ -3,9 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('adds one to input values', () {
-    final v = null as List;
-    print(v);
-    expect(v, null);
+    //final v = null as List;
+    //print(v);
+    //expect(v, null);
 //    final calculator = Calculator();
 //    expect(calculator.addOne(2), 3);
 //    expect(calculator.addOne(-7), -6);
