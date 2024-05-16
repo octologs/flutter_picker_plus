@@ -1,5 +1,5 @@
 name: flutter_picker_plus
-description: Flutter plugin picker. Continued work from flutter_picker. Include NumberPicker, DateTimePicker, ArrayPicker, and default linkage Picker. Provide flexible parameters to meet various needs.
+description: Flutter picker plus. Include NumberPicker, DateTimePicker, ArrayPicker, and default linkage Picker. Provide flexible parameters to meet various needs.
 version: 1.0.0
 homepage: https://github.com/octologs/flutter_picker_plus
 
