@@ -1,5 +1,5 @@
-name: flutter_picker_example
-description: Demonstrates how to use the flutter_picker plugin.
+name: flutter_picker_plus_example
+description: Demonstrates how to use the flutter_picker_plus plugin.
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -29,7 +29,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_picker:
+  flutter_picker_plus:
     path: ../
 
 # For information on the generic Dart part of this file, see the

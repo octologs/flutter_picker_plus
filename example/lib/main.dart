@@ -3,8 +3,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:flutter_picker/flutter_picker.dart';
-import 'package:flutter_picker_example/picker_test.dart';
+import 'package:flutter_picker_plus/flutter_picker_plus.dart';
+import 'package:flutter_picker_plus_example/picker_test.dart';
 import 'picker_data.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
