@@ -1,4 +1,4 @@
-## 1.0.1 - 2024.05.17
+## 1.1.0 - 2024.05.17
 
 * [fix] Fixing all linting errors
 * [fix] Android gradle build problems
