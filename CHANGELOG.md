@@ -1,7 +1,8 @@
 ## 1.0.1 - 2024.05.17
 
-* [fix] fixing all linting errors
-* [feature] added translation for german, portuguese, and greek. Completed the already existing languages.
+* [fix] Fixing all linting errors
+* [fix] Android gradle build problems
+* [feature] Added translation for german, portuguese, and greek. Completed the already existing languages.
 
 ## 1.0.0 - 2024.05.16
 
