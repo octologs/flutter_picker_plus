@@ -367,7 +367,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.yangyxd.flutterPickerExample;
+				PRODUCT_BUNDLE_IDENTIFIER = com.octologs.flutter_picker_plus.flutterPickerExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -390,7 +390,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.yangyxd.flutterPickerExample;
+				PRODUCT_BUNDLE_IDENTIFIER = com.octologs.flutter_picker_plus.flutterPickerExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
