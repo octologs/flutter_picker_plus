@@ -4,15 +4,6 @@
 
 Flutter picker plus. Include NumberPicker, DateTimePicker, ArrayPicker, and default linkage Picker. Provide flexible parameters to meet various needs. At the same time, you can extend more functions through custom adapters.
 
-> Supported  Platforms
->
-> * Android
-> * IOS
-> * Windows
-> * MacOS
-> * Linux
-> * Web
-
 ![image](https://github.com/octologs/flutter_picker_plus/blob/main/raw/views.gif?raw=true)
 
 ## How to Use
