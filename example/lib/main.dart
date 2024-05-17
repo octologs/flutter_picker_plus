@@ -43,15 +43,19 @@ class _MyAppState extends State<MyApp> {
           PickerLocalizationsDelegate.delegate, // 如果要使用本地化，请添加此行，则可以显示中文按钮
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: [
-          const Locale('en', 'US'),
-          const Locale('zh', 'CH'),
-          const Locale('ko', 'KO'),
-          const Locale('it', 'IT'),
-          const Locale('ar', 'AR'),
-          const Locale('tr', 'TR'),
-          const Locale('ro', 'RO'),
+          const Locale('en'),
+          const Locale('zh'),
+          const Locale('ko'),
+          const Locale('it'),
+          const Locale('ar'),
+          const Locale('tr'),
+          const Locale('ro'),
+          const Locale('de'),
+          const Locale('pt'),
+          const Locale('el'),
         ],
         home: MyHomePage());
   }
