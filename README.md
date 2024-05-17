@@ -13,7 +13,7 @@ Flutter picker plus. Include NumberPicker, DateTimePicker, ArrayPicker, and defa
 > * Linux
 > * Web
 
-![image](https://github.com/octologs/flutter_picker_plus/blob/main/raw/views.gif)
+![image](https://github.com/octologs/flutter_picker_plus/blob/main/raw/views.gif?raw=true)
 
 ## How to Use
 
