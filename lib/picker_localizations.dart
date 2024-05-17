@@ -13,8 +13,8 @@ abstract class PickerLocalizationsBase {
 
 /// localizations
 class PickerLocalizations extends PickerLocalizationsBase {
-  static PickerLocalizations _static = PickerLocalizations(null);
-  const PickerLocalizations(Locale? locale) : super(locale);
+  static const PickerLocalizations _static = PickerLocalizations(null);
+  const PickerLocalizations(super.locale);
 
   @override
   Object? getItem(String key) {
@@ -54,11 +54,11 @@ class PickerLocalizations extends PickerLocalizationsBase {
     if (!languages.contains(name)) {
       languages.add(name);
     }
-    final _defaultValue = localizedValues['en']!;
+    final defaultValue = localizedValues['en']!;
     final data = {
-      'cancelText': cancelText ?? _defaultValue['cancelText'] as String,
-      'confirmText': cancelText ?? _defaultValue['confirmText'] as String,
-      'ampm': ampm ?? _defaultValue['ampm'] as List,
+      'cancelText': cancelText ?? defaultValue['cancelText'] as String,
+      'confirmText': cancelText ?? defaultValue['confirmText'] as String,
+      'ampm': ampm ?? defaultValue['ampm'] as List,
     };
     if (months != null) {
       data['months'] = months;
