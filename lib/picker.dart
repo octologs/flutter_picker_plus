@@ -69,7 +69,7 @@ class Picker {
   final TextAlign textAlign;
   final IconThemeData? selectedIconTheme;
 
-  /// Text scaling
+  /// Text scaling factor
   final TextScaler? textScaler;
 
   final EdgeInsetsGeometry? columnPadding;
@@ -360,7 +360,7 @@ class _PickerWidget<T> extends StatefulWidget {
       {super.key, required this.picker, this.themeData, required this.isModal});
 
   @override
-  State<_PickerWidget> createState() => PickerWidgetState<T>();
+  PickerWidgetState createState() => PickerWidgetState<T>();
 }
 
 class PickerWidgetState<T> extends State<_PickerWidget> {
@@ -576,8 +576,12 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
                           !scrollController[i].position.hasContentDimensions;
 
                       final length = adapter.length;
-                      final view = _buildCupertinoPicker(context, i, length,
-                          adapter, lastIsEmpty ? ValueKey(length) : null);
+                      final viewWidget = _buildCupertinoPicker(
+                          context,
+                          i,
+                          length,
+                          adapter,
+                          lastIsEmpty ? ValueKey(length) : null);
 
                       if (lastIsEmpty ||
                           (!picker.changeToFirst &&
@@ -587,14 +591,14 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
                           // ignore: avoid_print
                           if (picker.printDebug) print("timer last");
                           var len = adapter.length;
-                          var index = (len < length ? len : length) - 1;
+                          var idx = (len < length ? len : length) - 1;
                           if (scrollController[i]
                               .position
                               .hasContentDimensions) {
-                            scrollController[i].jumpToItem(index);
+                            scrollController[i].jumpToItem(idx);
                           } else {
                             scrollController[i] =
-                                FixedExtentScrollController(initialItem: index);
+                                FixedExtentScrollController(initialItem: idx);
                             if (_keys[i] != null) {
                               _keys[i]!(() {});
                             }
@@ -602,7 +606,7 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
                         });
                       }
 
-                      return view;
+                      return viewWidget;
                     },
                   ),
           ),
@@ -653,9 +657,9 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
         adapter.setColumn(i - 1);
         return adapter.buildItem(context, index % length);
       },
-      onSelectedItemChanged: (int i) {
+      onSelectedItemChanged: (int idx) {
         if (length <= 0) return;
-        var index = i % length;
+        var index = idx % length;
         if (picker.printDebug) {
           // ignore: avoid_print
           print("onSelectedItemChanged. col: $i, row: $index");
@@ -897,8 +901,8 @@ class PickerDataAdapter<T> extends PickerAdapter<T> {
         if (o is T) {
           item.children!.add(PickerItem<T>(value: o));
         } else if (T == String) {
-          String v0 = o.toString();
-          item.children!.add(PickerItem<T>(value: v0 as T));
+          String str = o.toString();
+          item.children!.add(PickerItem<T>(value: str as T));
         }
       }
     }
@@ -1024,9 +1028,9 @@ class PickerDataAdapter<T> extends PickerAdapter<T> {
             j >= data[i].children!.length) {
           break;
         }
-        T v = data[i].children![j].value as T;
-        if (v != null) {
-          items.add(v);
+        T val = data[i].children![j].value as T;
+        if (val != null) {
+          items.add(val);
         }
       }
     } else {
@@ -1310,20 +1314,20 @@ class DateTimePickerAdapter extends PickerAdapter<DateTime> {
     }
     // Judge whether the day is in front of the month
     // If in the front, set "needUpdatePrev" = true
-    List<int> columnTypes;
+    List<int> colType;
     if (customColumnType != null) {
-      columnTypes = customColumnType!;
+      colType = customColumnType!;
     } else {
-      columnTypes = columnType[type];
+      colType = columnType[type];
     }
-    var month = columnTypes.indexWhere((element) => element == 1);
-    var day = columnTypes.indexWhere((element) => element == 2);
+    var month = colType.indexWhere((element) => element == 1);
+    var day = colType.indexWhere((element) => element == 2);
     _needUpdatePrev =
-        day < month || day < columnTypes.indexWhere((element) => element == 0);
+        day < month || day < colType.indexWhere((element) => element == 0);
     if (!_needUpdatePrev) {
       // check am/pm before hour-ap
-      var ap = columnTypes.indexWhere((element) => element == 6);
-      if (ap > columnTypes.indexWhere((element) => element == 7)) {
+      var ap = colType.indexWhere((element) => element == 6);
+      if (ap > colType.indexWhere((element) => element == 7)) {
         _apBeforeHourAp = true;
         _needUpdatePrev = true;
       }
@@ -1420,8 +1424,8 @@ class DateTimePickerAdapter extends PickerAdapter<DateTime> {
       return ye - _yearBegin + 1;
     }
     if (v == 31) return _calcDateCount(value!.year, value!.month);
-    int coltype = getColumnType(_col);
-    switch (coltype) {
+    int columnType = getColumnType(_col);
+    switch (columnType) {
       case 3: // hour
         if ((minHour != null && minHour! >= 0) ||
             (maxHour != null && maxHour! <= 23)) {
@@ -1486,8 +1490,8 @@ class DateTimePickerAdapter extends PickerAdapter<DateTime> {
     if (_needUpdatePrev) {
       if (value?.month == 2) {
         // Only February needs to be dealt with
-        var curType = getColumnType(curIndex);
-        return curType == 1 || curType == 0;
+        var curentColumnType = getColumnType(curIndex);
+        return curentColumnType == 1 || curentColumnType == 0;
       } else if (_apBeforeHourAp) {
         return getColumnType(curIndex) == 6;
       }
@@ -1523,8 +1527,9 @@ class DateTimePickerAdapter extends PickerAdapter<DateTime> {
       case 0:
         if (twoDigitYear) {
           text = "${_yearBegin + index}";
-          var l = text.length;
-          text = "${text.substring(l - (l - 2), l)}${_checkStr(yearSuffix)}";
+          var txtLength = text.length;
+          text =
+              "${text.substring(txtLength - (txtLength - 2), txtLength)}${_checkStr(yearSuffix)}";
         } else {
           text = "${_yearBegin + index}${_checkStr(yearSuffix)}";
         }
@@ -1724,11 +1729,11 @@ class DateTimePickerAdapter extends PickerAdapter<DateTime> {
         if (h > 23) h = 0;
         break;
     }
-    int days = _calcDateCount(year, month);
+    int dayCount = _calcDateCount(year, month);
 
     bool isChangeDay = false;
-    if (day > days) {
-      day = days;
+    if (day > dayCount) {
+      day = dayCount;
       isChangeDay = true;
     }
     value = DateTime(year, month, day, h, m, s);
