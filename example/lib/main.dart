@@ -40,7 +40,7 @@ class _MyAppState extends State<MyApp> {
         scrollBehavior: const MaterialScrollBehavior()
             .copyWith(scrollbars: true, dragDevices: _kTouchLikeDeviceTypes),
         localizationsDelegates: [
-          PickerLocalizationsDelegate.delegate, // 如果要使用本地化，请添加此行，则可以显示中文按钮
+          PickerLocalizationsDelegate.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
@@ -233,10 +233,6 @@ class _MyHomePageState extends State<MyHomePage> {
         changeToFirst: true,
         hideHeader: false,
         selectedTextStyle: TextStyle(color: Colors.blue),
-        // builderHeader: (context) {
-        //   final picker = PickerWidget.of(context);
-        //   return picker?.data?.title ?? Text("xxx");
-        // },
         onConfirm: (picker, value) {
           print(value.toString());
           print(picker.adapter.text);
@@ -268,7 +264,6 @@ class _MyHomePageState extends State<MyHomePage> {
           PickerItem(text: Icon(Icons.aspect_ratio)),
           PickerItem(text: Icon(Icons.android)),
           PickerItem(text: Icon(Icons.menu), children: [
-            // 测试：多加了一维数据
             PickerItem(text: Icon(Icons.account_box)),
             PickerItem(text: Icon(Icons.analytics)),
           ]),
@@ -424,23 +419,16 @@ class _MyHomePageState extends State<MyHomePage> {
         adapter: DateTimePickerAdapter(
           type: PickerDateTimeType.kMDYHM_AP,
           isNumberMonth: true,
-          //strAMPM: const["上午", "下午"],
           yearSuffix: "年",
           monthSuffix: "月",
           daySuffix: "日",
           hourSuffix: "時",
           minuteSuffix: "分",
           secondSuffix: "秒",
-          minValue: DateTime.now(),
           minuteInterval: 30,
-          //value: DateTime.tryParse("2026-01-29 00:00:00.000"),
-          //minHour: 1,
-          //maxHour: 23,
-          // twoDigitYear: true,
         ),
         title: Text("Select DateTime"),
         textAlign: TextAlign.right,
-        // selectedTextStyle: TextStyle(color: Colors.blue),
         delimiter: [
           PickerDelimiter(
               column: 5,
@@ -545,7 +533,6 @@ class _MyHomePageState extends State<MyHomePage> {
         }).showBottomSheet(context);
   }
 
-  /// 圆角背景
   showPickerDateTimeRoundBg(BuildContext context) {
     var picker = Picker(
         backgroundColor: Colors.transparent,
@@ -583,7 +570,6 @@ class _MyHomePageState extends State<MyHomePage> {
     picker.showModal(context, backgroundColor: Colors.transparent,
         builder: (context, view) {
       return Material(
-          // color: Colors.white,
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10), topRight: Radius.circular(10)),
           child: Container(
@@ -593,7 +579,6 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  /// 使用 onBuilderItem 方法
   showPickerCustomBuilder(BuildContext context) {
     Picker(
         hideHeader: true,
@@ -614,7 +599,6 @@ class _MyHomePageState extends State<MyHomePage> {
         }).showDialog(context);
   }
 
-  /// 自定义UI效果
   showPickerCustomizeUI(BuildContext context) {
     final itemExtent = 42.0;
     final bgColor = Colors.greenAccent.shade700;
@@ -698,7 +682,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         fontWeight: FontWeight.bold,
                         color: Colors.red,
                         fontSize: 14)),
-                // color: Colors.white,
               )),
         ],
         onSelect: (Picker picker, int index, List<int> selected) {
@@ -737,7 +720,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         fontWeight: FontWeight.bold,
                         color: Colors.red,
                         fontSize: 14)),
-                // color: Colors.white,
               )),
         ],
         onSelect: (Picker picker, int index, List<int> selected) {
