@@ -1,3 +1,7 @@
+## 1.1.1 - 2024.05.19
+
+* [fix] Example was not running
+
 ## 1.1.0 - 2024.05.17
 
 * [fix] Fixing all linting errors
