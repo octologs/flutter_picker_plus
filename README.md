@@ -6,6 +6,19 @@ Flutter picker plus. Include NumberPicker, DateTimePicker, ArrayPicker, and defa
 
 ![image](https://github.com/octologs/flutter_picker_plus/blob/main/raw/views.gif?raw=true)
 
+## Supported Languages
+
+- Arabic
+- Chinese
+- English
+- German
+- Greek
+- Italian
+- Korean
+- Portuguese
+- Romanian
+- Turkish
+
 ## How to Use
 
 ```dart

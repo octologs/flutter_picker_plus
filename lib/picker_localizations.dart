@@ -485,8 +485,8 @@ class PickerLocalizations extends PickerLocalizationsBase {
       ],
     },
     'el': {
-      'cancelText': 'Abbruch',
-      'confirmText': 'Bestätigen',
+      'cancelText': 'ακύρωση',
+      'confirmText': 'Επιβεβαιώνω',
       'ampm': ['AM', 'PM'],
       'months': [
         "Ιαν",

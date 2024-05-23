@@ -1,3 +1,7 @@
+## 1.1.2 - 2024.05.23
+
+* [fix] Error in greek translation
+
 ## 1.1.1 - 2024.05.19
 
 * [fix] Example was not running
