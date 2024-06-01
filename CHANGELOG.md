@@ -1,3 +1,7 @@
+## 1.1.3 - 2024.06.01
+
+* [fix] Missing supported languages fixed in Readme
+
 ## 1.1.2 - 2024.05.23
 
 * [fix] Error in greek translation

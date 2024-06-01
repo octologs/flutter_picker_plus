@@ -11,12 +11,15 @@ Flutter picker plus. Include NumberPicker, DateTimePicker, ArrayPicker, and defa
 - Arabic
 - Chinese
 - English
+- French
 - German
 - Greek
 - Italian
+- Japanese
 - Korean
 - Portuguese
 - Romanian
+- Spanish
 - Turkish
 
 ## How to Use
