@@ -1,3 +1,7 @@
+## 1.2.0 - 2024.06.21
+
+* [feature] Added translation for Russian, Hindi, Urdu, and Bengali.
+
 ## 1.1.3 - 2024.06.01
 
 * [fix] Missing supported languages fixed in Readme

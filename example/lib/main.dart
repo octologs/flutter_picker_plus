@@ -47,15 +47,22 @@ class _MyAppState extends State<MyApp> {
         ],
         supportedLocales: [
           const Locale('en'),
+          const Locale('ja'),
           const Locale('zh'),
           const Locale('ko'),
           const Locale('it'),
           const Locale('ar'),
+          const Locale('fr'),
+          const Locale('es'),
           const Locale('tr'),
           const Locale('ro'),
           const Locale('de'),
           const Locale('pt'),
           const Locale('el'),
+          const Locale('hi'),
+          const Locale('bn'),
+          const Locale('ru'),
+          const Locale('ur'),
         ],
         home: MyHomePage());
   }
