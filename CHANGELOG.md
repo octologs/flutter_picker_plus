@@ -1,3 +1,7 @@
+## 1.3.0 - 2024.06.26
+
+* [feature] Added translation for Indonesian.
+
 ## 1.2.0 - 2024.06.21
 
 * [feature] Added translation for Russian, Hindi, Urdu, and Bengali.

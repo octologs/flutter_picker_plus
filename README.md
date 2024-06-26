@@ -16,6 +16,7 @@ Flutter picker plus. Include NumberPicker, DateTimePicker, ArrayPicker, and defa
 - German
 - Greek
 - Hindi
+- Indonesian
 - Italian
 - Japanese
 - Korean
