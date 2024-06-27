@@ -88,6 +88,7 @@ class PickerLocalizations extends PickerLocalizationsBase {
     'bn',
     'ru',
     'ur',
+    'id',
   ];
 
   /// Language Values
@@ -651,6 +652,39 @@ class PickerLocalizations extends PickerLocalizationsBase {
         "اکتوبر",
         "نومبر",
         "دسمبر"
+      ],
+    },
+    'id': {
+      'cancelText': 'Batal',
+      'confirmText': 'Konfirmasi',
+      'ampm': ['AM', 'PM'],
+      'months': [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "Mei",
+        "Jun",
+        "Jul",
+        "Agu",
+        "Sep",
+        "Okt",
+        "Nov",
+        "Des",
+      ],
+      'monthsLong': [
+        "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember"
       ],
     },
   };
