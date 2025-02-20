@@ -64,6 +64,8 @@ class _MyAppState extends State<MyApp> {
           const Locale('ru'),
           const Locale('ur'),
           const Locale('id'),
+          const Locale('vi'),
+          const Locale('ja'),
         ],
         home: MyHomePage());
   }

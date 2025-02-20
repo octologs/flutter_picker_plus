@@ -1,3 +1,7 @@
+## 1.4.0 - 2025.02.20
+
+* [festure] Added translation for Javanese and Vietnamese
+
 ## 1.3.0 - 2024.06.26
 
 * [feature] Added translation for Indonesian.
