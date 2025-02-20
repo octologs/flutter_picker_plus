@@ -551,7 +551,7 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
     adapter.setColumn(-1);
 
     final decoration = BoxDecoration(
-      color: picker.containerColor ?? theme!.dialogBackgroundColor,
+      color: picker.containerColor ?? theme!.dialogTheme.backgroundColor,
     );
 
     if (adapter.length > 0) {

@@ -1,3 +1,7 @@
+## 1.4.1 - 2025.02.20
+
+* [bugfix] Static Analysis Fix: 'dialogBackgroundColor' is deprecated and shouldn't be used. Use DialogThemeData.backgroundColor instead.
+
 ## 1.4.0 - 2025.02.20
 
 * [festure] Added translation for Javanese and Vietnamese
