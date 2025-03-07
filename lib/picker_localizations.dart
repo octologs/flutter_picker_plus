@@ -91,6 +91,7 @@ class PickerLocalizations extends PickerLocalizationsBase {
     'id',
     'jv',
     'vi',
+    'sl'
   ];
 
   /// Language Values
@@ -754,6 +755,39 @@ class PickerLocalizations extends PickerLocalizationsBase {
         "Tháng 11",
         "Tháng 12"
       ],
-    }
+    },
+    'sl': {
+      'cancelText': 'Prekliči',
+      'confirmText': 'Potrdi',
+      'ampm': ['AM', 'PM'],
+      'months': [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "Maj",
+        "Jun",
+        "Jul",
+        "Avg",
+        "Sep",
+        "Okt",
+        "Nov",
+        "Dec",
+      ],
+      'monthsLong': [
+        "Januar",
+        "Februar",
+        "Marec",
+        "April",
+        "Maj",
+        "Junij",
+        "Julij",
+        "Avgust",
+        "September",
+        "Oktober",
+        "November",
+        "December"
+      ],
+    },
   };
 }

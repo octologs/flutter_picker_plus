@@ -28,6 +28,7 @@ Flutter picker plus. Include NumberPicker, DateTimePicker, ArrayPicker, and defa
 - Urdu
 - Javanese
 - Vietnamese
+- Slovenian
 
 Supporting more than [10+ most spoken languages](https://en.wikipedia.org/wiki/List_of_languages_by_total_number_of_speakers)
 
