@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' as material;
+import 'package:flutter/material.dart';
 import 'dart:async';
 import 'picker_localizations.dart';
 
@@ -983,6 +984,8 @@ class PickerDataAdapter<T> extends PickerAdapter<T> {
   Widget buildItem(BuildContext context, int index) {
     final PickerItem item = _datas![index];
     final isSel = index == picker!.selecteds[_col];
+    final theme = Theme.of(context);
+
     if (picker!.onBuilderItem != null) {
       final v = picker!.onBuilderItem!(
           context, item.value.toString(), item.text, isSel, _col, index);
@@ -990,16 +993,36 @@ class PickerDataAdapter<T> extends PickerAdapter<T> {
     }
     if (item.text != null) {
       return isSel && picker!.selectedTextStyle != null
-          ? DefaultTextStyle(
-              style: picker!.selectedTextStyle!,
-              textAlign: picker!.textAlign,
-              child: picker!.selectedIconTheme != null
-                  ? IconTheme(
-                      data: picker!.selectedIconTheme!,
-                      child: item.text!,
-                    )
-                  : item.text!)
-          : item.text!;
+          ? Center(
+              child: DefaultTextStyle(
+                  style: picker!.selectedTextStyle!,
+                  textAlign: picker!.textAlign,
+                  child: picker!.selectedIconTheme != null
+                      ? IconTheme(
+                          data: picker!.selectedIconTheme!,
+                          child: item.text!,
+                        )
+                      : item.text!),
+            )
+          : Center(
+              child: DefaultTextStyle(
+                style: picker!.textStyle ??
+                    TextStyle(
+                      color: theme.brightness == Brightness.dark
+                          ? material.Colors.white
+                          : material.Colors.black87,
+                      fontFamily: theme.textTheme.titleLarge?.fontFamily,
+                      fontSize: Picker.defaultTextSize,
+                    ),
+                textAlign: picker!.textAlign,
+                child: picker!.selectedIconTheme != null
+                    ? IconTheme(
+                        data: picker!.selectedIconTheme!,
+                        child: item.text!,
+                      )
+                    : item.text!,
+              ),
+            );
     }
     return makeText(
         item.text, item.text != null ? null : item.value.toString(), isSel);

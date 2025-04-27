@@ -1,3 +1,7 @@
+## 1.5.1 - 2025.04.15
+
+* [bugfix] Styling adjusted
+
 ## 1.5.0 - 2025.03.07
 
 * [festure] Added translation for Slovenian
