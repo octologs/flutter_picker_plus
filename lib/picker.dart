@@ -5,40 +5,164 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'picker_localizations.dart';
 
-/// Picker selected callback.
+/// Callback function that is called when a picker item is selected.
+///
+/// Parameters:
+/// * [picker] - The picker instance that triggered the selection
+/// * [index] - The column index of the selected item
+/// * [selected] - List of all selected indices across all columns
 typedef PickerSelectedCallback = void Function(
     Picker picker, int index, List<int> selected);
 
-/// Picker confirm callback.
+/// Callback function that is called when the picker selection is confirmed.
+///
+/// Parameters:
+/// * [picker] - The picker instance that was confirmed
+/// * [selected] - List of all selected indices across all columns
 typedef PickerConfirmCallback = void Function(
     Picker picker, List<int> selected);
 
-/// Picker confirm before callback.
+/// Callback function that is called before confirming the picker selection.
+///
+/// This callback allows for validation or custom logic before confirmation.
+/// Return `true` to proceed with confirmation, `false` to cancel.
+///
+/// Parameters:
+/// * [picker] - The picker instance being confirmed
+/// * [selected] - List of all selected indices across all columns
+///
+/// Returns a [Future<bool>] indicating whether to proceed with confirmation.
 typedef PickerConfirmBeforeCallback = Future<bool> Function(
     Picker picker, List<int> selected);
 
-/// Picker value format callback.
+/// Callback function for formatting picker values to display strings.
+///
+/// This is used to customize how values are displayed in the picker.
+///
+/// Parameters:
+/// * [value] - The value to be formatted
+///
+/// Returns a formatted string representation of the value.
 typedef PickerValueFormat<T> = String Function(T value);
 
-/// Picker widget builder
+/// Builder function for customizing the picker widget.
+///
+/// This allows complete customization of how the picker is presented.
+///
+/// Parameters:
+/// * [context] - The build context
+/// * [pickerWidget] - The default picker widget
+///
+/// Returns a customized widget wrapping or replacing the picker.
 typedef PickerWidgetBuilder = Widget Function(
     BuildContext context, Widget pickerWidget);
 
-/// Picker build item, If 'null' is returned, the default build is used
+/// Builder function for customizing individual picker items.
+///
+/// This callback is called for each item in the picker columns.
+/// If `null` is returned, the default item builder is used.
+///
+/// Parameters:
+/// * [context] - The build context
+/// * [text] - The text content of the item (may be null)
+/// * [child] - The default child widget for the item (may be null)
+/// * [selected] - Whether this item is currently selected
+/// * [col] - The column index of this item
+/// * [index] - The row index of this item within the column
+///
+/// Returns a custom widget for the item, or `null` to use the default.
 typedef PickerItemBuilder = Widget? Function(BuildContext context, String? text,
     Widget? child, bool selected, int col, int index);
 
-/// Picker
+/// A customizable picker widget for Flutter applications.
+///
+/// The [Picker] class provides a flexible and customizable way to present
+/// selection interfaces to users. It supports multiple columns, various data
+/// adapters, and extensive customization options.
+///
+/// ## Features
+///
+/// * Multiple column support with custom flex ratios
+/// * Various data adapters (arrays, numbers, date/time)
+/// * Extensive styling and theming options
+/// * Multiple presentation modes (modal, dialog, bottom sheet)
+/// * Internationalization support
+/// * Custom item builders and formatting
+/// * Loop scrolling and smooth animations
+///
+/// ## Basic Usage
+///
+/// ```dart
+/// final picker = Picker(
+///   adapter: PickerDataAdapter<String>(
+///     pickerData: ['Option 1', 'Option 2', 'Option 3'],
+///   ),
+///   onConfirm: (picker, selected) {
+///     print('Selected: ${picker.getSelectedValues()}');
+///   },
+/// );
+///
+/// picker.showModal<List<int>>(context);
+/// ```
+///
+/// ## Advanced Usage with Multiple Columns
+///
+/// ```dart
+/// final picker = Picker(
+///   adapter: PickerDataAdapter<String>(
+///     pickerData: [
+///       {'Fruits': ['Apple', 'Banana', 'Orange']},
+///       {'Colors': ['Red', 'Green', 'Blue']},
+///     ],
+///   ),
+///   title: Text('Choose Fruit and Color'),
+///   columnFlex: [2, 1], // First column takes 2/3, second takes 1/3
+///   onConfirm: (picker, selected) {
+///     final values = picker.getSelectedValues();
+///     print('Selected fruit: ${values[0]}, color: ${values[1]}');
+///   },
+/// );
+/// ```
+///
+/// See also:
+/// * [PickerAdapter] for different data sources
+/// * [PickerDataAdapter] for array-based data
+/// * [NumberPickerAdapter] for numeric ranges
+/// * [DateTimePickerAdapter] for date and time selection
 class Picker {
   static const double defaultTextSize = 18.0;
 
-  /// Index of currently selected items
+  /// List of currently selected item indices for each column.
+  ///
+  /// Each index corresponds to the selected item in its respective column.
+  /// For example, if [selecteds] is [0, 2, 1], it means:
+  /// - Column 0: first item (index 0) is selected
+  /// - Column 1: third item (index 2) is selected  
+  /// - Column 2: second item (index 1) is selected
   late List<int> selecteds;
 
-  /// Picker adapter, Used to provide data and generate widgets
+  /// The data adapter that provides content and manages the picker's data.
+  ///
+  /// The adapter determines what data is displayed in the picker columns
+  /// and how many columns are shown. Different adapter types support
+  /// different data sources:
+  /// - [PickerDataAdapter]: For list/array data
+  /// - [NumberPickerAdapter]: For numeric ranges
+  /// - [DateTimePickerAdapter]: For date and time selection
   late PickerAdapter adapter;
 
-  /// insert separator before picker columns
+  /// Optional list of delimiters to insert between picker columns.
+  ///
+  /// Delimiters allow you to add custom widgets (like text or icons)
+  /// between columns to improve visual separation or add context.
+  ///
+  /// Example:
+  /// ```dart
+  /// delimiter: [
+  ///   PickerDelimiter(child: Text(':'), column: 1),
+  ///   PickerDelimiter(child: Text(' '), column: 2),
+  /// ]
+  /// ```
   final List<PickerDelimiter>? delimiter;
 
   final VoidCallback? onCancel;
@@ -46,10 +170,24 @@ class Picker {
   final PickerConfirmCallback? onConfirm;
   final PickerConfirmBeforeCallback? onConfirmBefore;
 
-  /// When the previous level selection changes, scroll the child to the first item.
+  /// Whether to automatically scroll child columns to the first item when parent selection changes.
+  ///
+  /// When `true`, selecting a different item in a parent column will reset
+  /// all child columns to their first item. This is useful for hierarchical
+  /// data where child options depend on parent selections.
+  ///
+  /// Defaults to `false`.
   final bool changeToFirst;
 
-  /// Specify flex for each column
+  /// Custom flex values for each picker column.
+  ///
+  /// Controls the relative width of each column. For example:
+  /// - `[1, 1, 1]`: All columns have equal width
+  /// - `[2, 1, 1]`: First column is twice as wide as others
+  /// - `[3, 2, 1]`: First column takes 3/6, second takes 2/6, third takes 1/6
+  ///
+  /// If `null` or shorter than the number of columns, remaining columns
+  /// use flex value of 1.
   final List<int>? columnFlex;
 
   final Widget? title;
@@ -60,7 +198,13 @@ class Picker {
 
   final double height;
 
-  /// Height of list item
+  /// The height of each picker item in logical pixels.
+  ///
+  /// This determines the vertical space each item occupies in the picker.
+  /// Larger values create more spacing between items, smaller values create
+  /// more compact layouts.
+  ///
+  /// Defaults to 28.0 pixels.
   final double itemExtent;
 
   final TextStyle? textStyle,
@@ -70,28 +214,83 @@ class Picker {
   final TextAlign textAlign;
   final IconThemeData? selectedIconTheme;
 
-  /// Text scaling factor
+  /// Controls how text in the picker scales with the system font size.
+  ///
+  /// When `null`, uses the ambient [MediaQuery.textScalerOf] from the
+  /// build context. This allows the picker text to respect user
+  /// accessibility settings for text size.
   final TextScaler? textScaler;
 
   final EdgeInsetsGeometry? columnPadding;
   final Color? backgroundColor, headerColor, containerColor;
 
-  /// Hide head
+  /// Whether to hide the picker header (title, cancel, and confirm buttons).
+  ///
+  /// When `true`, only the picker columns are shown without any header.
+  /// This is useful when embedding the picker in custom UI or when you
+  /// want to handle confirmation through other means.
+  ///
+  /// Defaults to `false`.
   final bool hideHeader;
 
-  /// Show pickers in reversed order
+  /// Whether to display picker columns in reverse order.
+  ///
+  /// When `true`, columns are displayed from right to left instead of
+  /// left to right. This can be useful for right-to-left locales or
+  /// specific design requirements.
+  ///
+  /// Defaults to `false`.
   final bool reversedOrder;
 
-  /// Generate a custom header， [hideHeader] = true
+  /// Custom builder for the picker header.
+  ///
+  /// When provided, this builder replaces the default header (which contains
+  /// title, cancel, and confirm buttons). The [hideHeader] property is ignored
+  /// when this builder is used.
+  ///
+  /// This allows complete customization of the header area.
+  ///
+  /// Example:
+  /// ```dart
+  /// builderHeader: (context) => Container(
+  ///   padding: EdgeInsets.all(16),
+  ///   child: Text('Custom Header'),
+  /// )
+  /// ```
   final WidgetBuilder? builderHeader;
 
-  /// Generate a custom item widget, If 'null' is returned, the default builder is used
+  /// Custom builder for individual picker items.
+  ///
+  /// This callback is invoked for each item in every column, allowing
+  /// complete customization of how items are displayed. If the callback
+  /// returns `null`, the default item rendering is used.
+  ///
+  /// The builder receives information about the item's content, selection
+  /// state, and position to enable context-aware customization.
+  ///
+  /// See [PickerItemBuilder] for detailed parameter information.
   final PickerItemBuilder? onBuilderItem;
 
-  /// List item loop
+  /// Whether picker items should loop infinitely when scrolling.
+  ///
+  /// When `true`, scrolling past the last item wraps to the first item,
+  /// and scrolling before the first item wraps to the last item. This
+  /// creates an infinite scrolling effect.
+  ///
+  /// When `false`, scrolling stops at the first and last items.
+  ///
+  /// Defaults to `false`.
   final bool looping;
 
-  /// Delay generation for smoother animation, This is the number of milliseconds to wait. It is recommended to > = 200
+  /// Delay in milliseconds before building picker content for smoother animations.
+  ///
+  /// This creates a brief delay before the picker content is rendered,
+  /// which can make opening animations appear smoother, especially for
+  /// complex pickers with many items.
+  ///
+  /// Recommended value is >= 200 milliseconds. Set to 0 to disable.
+  ///
+  /// Defaults to 0 (no delay).
   final int smooth;
 
   final Widget? footer;
@@ -158,7 +357,22 @@ class Picker {
   PickerWidgetState? get state => _state;
   int _maxLevel = 1;
 
-  /// Build picker control
+  /// Creates the picker widget with optional theme and modal configuration.
+  ///
+  /// This method builds the actual picker widget that can be embedded
+  /// in your UI or displayed in dialogs/modals.
+  ///
+  /// Parameters:
+  /// * [themeData] - Optional theme to override default styling
+  /// * [isModal] - Whether the picker is displayed in a modal context
+  /// * [key] - Optional widget key for the picker
+  ///
+  /// Returns the constructed picker widget.
+  ///
+  /// Example:
+  /// ```dart
+  /// Widget pickerWidget = picker.makePicker();
+  /// ```
   Widget makePicker(
       [material.ThemeData? themeData, bool isModal = false, Key? key]) {
     _maxLevel = adapter.maxLevel;
@@ -173,7 +387,15 @@ class Picker {
     return _widget!;
   }
 
-  /// show picker bottom sheet
+  /// Shows the picker in a bottom sheet using the provided scaffold state.
+  ///
+  /// **Deprecated**: Use [showBottomSheet] instead, which works with BuildContext.
+  ///
+  /// Parameters:
+  /// * [state] - The scaffold state to show the bottom sheet on
+  /// * [themeData] - Optional theme for styling
+  /// * [backgroundColor] - Background color of the bottom sheet
+  /// * [builder] - Optional custom builder to wrap the picker
   void show(
     material.ScaffoldState state, {
     material.ThemeData? themeData,
@@ -186,7 +408,21 @@ class Picker {
     }, backgroundColor: backgroundColor);
   }
 
-  /// show picker bottom sheet
+  /// Shows the picker in a persistent bottom sheet.
+  ///
+  /// The bottom sheet remains visible until dismissed by user interaction
+  /// or programmatically closed.
+  ///
+  /// Parameters:
+  /// * [context] - Build context for showing the bottom sheet
+  /// * [themeData] - Optional theme for styling
+  /// * [backgroundColor] - Background color of the bottom sheet
+  /// * [builder] - Optional custom builder to wrap the picker
+  ///
+  /// Example:
+  /// ```dart
+  /// picker.showBottomSheet(context);
+  /// ```
   void showBottomSheet(
     BuildContext context, {
     material.ThemeData? themeData,
@@ -199,7 +435,32 @@ class Picker {
     }, backgroundColor: backgroundColor);
   }
 
-  /// Display modal picker
+  /// Displays the picker in a modal bottom sheet.
+  ///
+  /// This is the most common way to show a picker. The modal appears
+  /// from the bottom of the screen and can be dismissed by tapping
+  /// outside or using the cancel button.
+  ///
+  /// Parameters:
+  /// * [context] - Build context for showing the modal
+  /// * [themeData] - Optional theme for styling
+  /// * [isScrollControlled] - Whether the modal can scroll beyond 50% height
+  /// * [useRootNavigator] - Whether to use the root navigator
+  /// * [backgroundColor] - Background color of the modal
+  /// * [shape] - Custom shape for the modal
+  /// * [clipBehavior] - How to clip the modal content
+  /// * [builder] - Optional custom builder to wrap the picker
+  ///
+  /// Returns a [Future] that completes when the modal is dismissed.
+  /// The result contains the selected values or `null` if cancelled.
+  ///
+  /// Example:
+  /// ```dart
+  /// final result = await picker.showModal<List<int>>(context);
+  /// if (result != null) {
+  ///   print('Selected indices: $result');
+  /// }
+  /// ```
   Future<T?> showModal<T>(BuildContext context,
       {material.ThemeData? themeData,
       bool isScrollControlled = false,
@@ -272,7 +533,21 @@ class Picker {
         });
   }
 
-  /// Get the value of the current selection
+  /// Gets the currently selected values from the picker.
+  ///
+  /// Returns a list containing the actual values (not indices) that are
+  /// currently selected in each column. The type and format of values
+  /// depends on the adapter being used.
+  ///
+  /// For [PickerDataAdapter]: Returns the actual data items
+  /// For [NumberPickerAdapter]: Returns the numeric values
+  /// For [DateTimePickerAdapter]: Returns DateTime components
+  ///
+  /// Example:
+  /// ```dart
+  /// final values = picker.getSelectedValues();
+  /// print('Selected: $values'); // e.g., ['Apple', 'Red']
+  /// ```
   List getSelectedValues() {
     return adapter.getSelectedValues();
   }
@@ -320,24 +595,97 @@ class Picker {
           padding: theme?.padding);
 }
 
-/// Delimiter
+/// A delimiter widget that can be inserted between picker columns.
+///
+/// Delimiters allow you to add visual separators or contextual elements
+/// between picker columns to improve readability and user experience.
+///
+/// Example:
+/// ```dart
+/// delimiter: [
+///   PickerDelimiter(child: Text(':'), column: 1),
+///   PickerDelimiter(child: Icon(Icons.arrow_forward), column: 2),
+/// ]
+/// ```
 class PickerDelimiter {
+  /// The widget to display as a delimiter.
+  ///
+  /// This can be any Flutter widget such as Text, Icon, or Container.
   final Widget? child;
+
+  /// The column position where this delimiter should be inserted.
+  ///
+  /// - Values < 0: Insert at the beginning (before first column)
+  /// - Values >= number of columns: Insert at the end (after last column)  
+  /// - Other values: Insert at the specified position
+  ///
+  /// Defaults to 1 (between first and second column).
   final int column;
+
+  /// Creates a picker delimiter.
+  ///
+  /// Parameters:
+  /// * [child] - The widget to display as delimiter
+  /// * [column] - Position to insert the delimiter (defaults to 1)
   PickerDelimiter({required this.child, this.column = 1});
 }
 
-/// picker data list item
+/// Represents a single item in a picker column with optional hierarchical children.
+///
+/// [PickerItem] is the fundamental data structure used by [PickerDataAdapter]
+/// to represent selectable items. Items can have custom display widgets,
+/// associated data values, and child items for hierarchical data structures.
+///
+/// ## Simple Items
+///
+/// ```dart
+/// PickerItem<String>(
+///   text: Text('Apple'),
+///   value: 'apple',
+/// )
+/// ```
+///
+/// ## Hierarchical Items
+///
+/// ```dart
+/// PickerItem<String>(
+///   text: Text('Fruits'),
+///   value: 'fruits',
+///   children: [
+///     PickerItem(text: Text('Apple'), value: 'apple'),
+///     PickerItem(text: Text('Banana'), value: 'banana'),
+///   ],
+/// )
+/// ```
 class PickerItem<T> {
-  /// Display content
+  /// The widget used to display this item in the picker.
+  ///
+  /// When `null`, the picker will use the string representation of [value]
+  /// or a default text widget. Custom widgets allow for rich formatting,
+  /// icons, or complex layouts.
   final Widget? text;
 
-  /// Data value
+  /// The actual data value associated with this item.
+  ///
+  /// This is the value returned when this item is selected. It can be
+  /// any type [T] such as String, int, or custom objects.
   final T? value;
 
-  /// Child items
+  /// Child items for hierarchical data structures.
+  ///
+  /// When provided, selecting this item will reveal the children in
+  /// subsequent columns, creating a drill-down navigation experience.
+  /// Used for multi-level data like Country > State > City.
   final List<PickerItem<T>>? children;
 
+  /// Creates a picker item.
+  ///
+  /// Parameters:
+  /// * [text] - Widget to display in the picker (optional)
+  /// * [value] - Data value associated with this item (optional) 
+  /// * [children] - Child items for hierarchical structures (optional)
+  ///
+  /// At least one of [text] or [value] should be provided.
   PickerItem({this.text, this.value, this.children});
 }
 
@@ -722,14 +1070,83 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
   }
 }
 
-/// Picker data adapter
+/// Abstract base class for picker data adapters.
+///
+/// [PickerAdapter] defines the interface that all picker data sources must
+/// implement. Different adapters provide different types of data and behaviors:
+///
+/// * [PickerDataAdapter] - For array/list based data with hierarchical support
+/// * [NumberPickerAdapter] - For numeric ranges and sequences  
+/// * [DateTimePickerAdapter] - For date and time selection
+///
+/// ## Custom Adapters
+///
+/// You can create custom adapters by extending this class:
+///
+/// ```dart
+/// class MyCustomAdapter extends PickerAdapter<MyDataType> {
+///   @override
+///   int getLength() => myData.length;
+///   
+///   @override
+///   int getMaxLevel() => 1;
+///   
+///   @override
+///   Widget buildItem(BuildContext context, int index) {
+///     return Text(myData[index].toString());
+///   }
+///   
+///   // ... implement other required methods
+/// }
+/// ```
+///
+/// See also:
+/// * [PickerDataAdapter] for the most common use cases
+/// * [NumberPickerAdapter] for numeric data
+/// * [DateTimePickerAdapter] for date/time selection
 abstract class PickerAdapter<T> {
+  /// Reference to the picker widget using this adapter.
+  ///
+  /// This is set automatically when the adapter is assigned to a picker.
   Picker? picker;
 
+  /// Returns the number of items in the current column.
+  ///
+  /// This method is called to determine how many items should be displayed
+  /// in the currently active column.
   int getLength();
+
+  /// Returns the maximum number of columns (levels) this adapter supports.
+  ///
+  /// For simple single-column data, return 1.
+  /// For hierarchical data, return the maximum depth.
   int getMaxLevel();
+
+  /// Sets the active column for subsequent operations.
+  ///
+  /// This method is called before [getLength] and [buildItem] to specify
+  /// which column is being processed. The index is typically 0-based.
+  ///
+  /// Parameters:
+  /// * [index] - The column index to activate
   void setColumn(int index);
+
+  /// Initializes the selected indices for all columns.
+  ///
+  /// This method is called once when the picker is first displayed to
+  /// set up default selections for each column.
   void initSelects();
+
+  /// Builds the widget for a specific item in the current column.
+  ///
+  /// This method is called for each visible item in the picker to create
+  /// the widget that represents that item.
+  ///
+  /// Parameters:
+  /// * [context] - The build context
+  /// * [index] - The item index within the current column
+  ///
+  /// Returns a widget representing the item.
   Widget buildItem(BuildContext context, int index);
 
   /// 是否需要更新前面的列
@@ -857,7 +1274,65 @@ abstract class PickerAdapter<T> {
   }
 }
 
-/// Data adapter
+/// A picker adapter for array-based and hierarchical data structures.
+///
+/// [PickerDataAdapter] is the most commonly used adapter that supports
+/// both simple arrays and complex hierarchical data. It can handle:
+///
+/// * Simple lists: `['Option 1', 'Option 2', 'Option 3']`
+/// * Multi-dimensional arrays for independent columns
+/// * Hierarchical maps for linked columns: `{'Category': ['Item1', 'Item2']}`
+/// * Mixed data types with custom [PickerItem] objects
+///
+/// ## Simple Array Example
+///
+/// ```dart
+/// final adapter = PickerDataAdapter<String>(
+///   pickerData: ['Apple', 'Banana', 'Orange'],
+/// );
+/// ```
+///
+/// ## Multi-Column Array Example (Independent Columns)
+///
+/// ```dart
+/// final adapter = PickerDataAdapter<String>(
+///   pickerData: [
+///     ['Red', 'Green', 'Blue'],     // Column 1: Colors
+///     ['Small', 'Medium', 'Large'], // Column 2: Sizes
+///   ],
+///   isArray: true,
+/// );
+/// ```
+///
+/// ## Hierarchical Example (Linked Columns)
+///
+/// ```dart
+/// final adapter = PickerDataAdapter<String>(
+///   pickerData: [
+///     {
+///       'Fruits': ['Apple', 'Banana', 'Orange'],
+///       'Vegetables': ['Carrot', 'Broccoli', 'Spinach'],
+///     }
+///   ],
+/// );
+/// ```
+///
+/// ## Custom PickerItem Example
+///
+/// ```dart
+/// final adapter = PickerDataAdapter<String>(
+///   data: [
+///     PickerItem<String>(
+///       text: Row(children: [Icon(Icons.apple), Text('Apple')]),
+///       value: 'apple',
+///     ),
+///     PickerItem<String>(
+///       text: Row(children: [Icon(Icons.android), Text('Banana')]),
+///       value: 'banana', 
+///     ),
+///   ],
+/// );
+/// ```
 class PickerDataAdapter<T> extends PickerAdapter<T> {
   late List<PickerItem<T>> data;
   List<PickerItem<dynamic>>? _datas;
