@@ -1,7 +1,7 @@
 ## 1.5.2 - 2025.04.15
 
 * [festure] Added shape and clipBehavior parameters to showModalBottomSheet (thanks to [brettpappas](https://github.com/octologs/flutter_picker_plus/pull/12))
-
+* [bugfix] SDK changed to sdk: '>=3.0.0 <4.0.0'
 
 ## 1.5.1 - 2025.04.15
 

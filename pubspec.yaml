@@ -4,7 +4,7 @@ version: 1.5.1
 homepage: https://github.com/octologs/flutter_picker_plus
 
 environment:
-  sdk: '>=3.4.0 <4.0.0'
+  sdk: '>=3.0.0 <4.0.0'
   flutter: ">=1.17.0"
 
 dependencies:
@@ -17,4 +17,3 @@ dev_dependencies:
   flutter_lints: ^6.0.0
 
 flutter:
-color: theme!.accentColor
