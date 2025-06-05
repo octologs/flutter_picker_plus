@@ -1,8 +1,10 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RawPickerTest extends StatefulWidget {
-  const RawPickerTest({Key? key}) : super(key: key);
+  const RawPickerTest({super.key});
 
   @override
   State<RawPickerTest> createState() => _RawPickerTestState();
@@ -21,9 +23,12 @@ class _RawPickerTestState extends State<RawPickerTest> {
             height: 320,
             child: Row(
               children: [
-                Expanded(child: _buildCupertinoPicker(context, 0, 20, ValueKey(0))),
-                Expanded(child: _buildCupertinoPicker(context, 1, 120, ValueKey(1))),
-                Expanded(child: _buildCupertinoPicker(context, 2, 50, ValueKey(2))),
+                Expanded(
+                    child: _buildCupertinoPicker(context, 0, 20, ValueKey(0))),
+                Expanded(
+                    child: _buildCupertinoPicker(context, 1, 120, ValueKey(1))),
+                Expanded(
+                    child: _buildCupertinoPicker(context, 2, 50, ValueKey(2))),
               ],
             ),
           )
@@ -32,21 +37,21 @@ class _RawPickerTestState extends State<RawPickerTest> {
     );
   }
 
-  Widget _buildCupertinoPicker(BuildContext context,
-      int i, int _length, Key? key) {
+  Widget _buildCupertinoPicker(
+      BuildContext context, int i, int length, Key? key) {
     return CupertinoPicker.builder(
       key: key,
       scrollController: FixedExtentScrollController(),
       itemExtent: 42,
       selectionOverlay: const CupertinoPickerDefaultSelectionOverlay(),
-      childCount: _length,
+      childCount: length,
       itemBuilder: (context, index) {
         return Text("$i.$index");
       },
-      onSelectedItemChanged: (int _index) {
-        if (_length <= 0) return;
-        var index = _index % _length;
-        print("onSelectedItemChanged. col: $i, row: $index");
+      onSelectedItemChanged: (int index) {
+        if (length <= 0) return;
+        var i = index % length;
+        print("onSelectedItemChanged. col: $i, row: $i");
       },
     );
   }

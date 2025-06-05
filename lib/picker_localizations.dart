@@ -32,10 +32,8 @@ class PickerLocalizations extends PickerLocalizationsBase {
         _static;
   }
 
-  /// 注册自定义语言
-  ///
   /// Register custom language
-  static registerCustomLanguage(String name,
+  static void registerCustomLanguage(String name,
       {String? cancelText,
       String? confirmText,
       List<String>? ampm,
@@ -57,7 +55,7 @@ class PickerLocalizations extends PickerLocalizationsBase {
     final defaultValue = localizedValues['en']!;
     final data = {
       'cancelText': cancelText ?? defaultValue['cancelText'] as String,
-      'confirmText': cancelText ?? defaultValue['confirmText'] as String,
+      'confirmText': confirmText ?? defaultValue['confirmText'] as String,
       'ampm': ampm ?? defaultValue['ampm'] as List,
     };
     if (months != null) {

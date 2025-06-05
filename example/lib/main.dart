@@ -1,18 +1,23 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 import 'dart:ui';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:flutter_picker_plus/flutter_picker_plus.dart';
-import 'package:flutter_picker_plus_example/picker_test.dart';
-import 'picker_data.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_picker_plus/flutter_picker_plus.dart';
+
+import './picker_test.dart';
+import './picker_data.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
-  _MyAppState createState() => _MyAppState();
+  MyAppState createState() => MyAppState();
 }
 
 final String _fontFamily = Platform.isWindows ? "Roboto" : "";
@@ -25,7 +30,7 @@ const Set<PointerDeviceKind> _kTouchLikeDeviceTypes = <PointerDeviceKind>{
   PointerDeviceKind.unknown
 };
 
-class _MyAppState extends State<MyApp> {
+class MyAppState extends State<MyApp> {
   bool dark = false;
 
   @override
@@ -73,11 +78,13 @@ class _MyAppState extends State<MyApp> {
 }
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  MyHomePageState createState() => MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class MyHomePageState extends State<MyHomePage> {
   final double listSpec = 4.0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String stateText = "";
@@ -87,13 +94,13 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('Picker ${stateText.isEmpty ? "" : " - " + stateText}'),
+        title: Text('Picker ${stateText.isEmpty ? "" : " - $stateText"}'),
         automaticallyImplyLeading: false,
         elevation: 0.0,
         actions: [
           IconButton(
               onPressed: () {
-                final appState = context.findAncestorStateOfType<_MyAppState>();
+                final appState = context.findAncestorStateOfType<MyAppState>();
                 if (appState == null) return;
                 appState.setState(() {
                   appState.dark = !appState.dark;
@@ -212,15 +219,15 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  showMsg(String msg) {
+  void showMsg(String msg) {
     final state = ScaffoldMessenger.of(context);
     state.showSnackBar(SnackBar(content: Text(msg)));
   }
 
-  showPicker(BuildContext context) async {
+  Future<void> showPicker(BuildContext context) async {
     Picker picker = Picker(
         adapter: PickerDataAdapter<String>(
-            pickerData: JsonDecoder().convert(PickerData)),
+            pickerData: JsonDecoder().convert(pickerData)),
         changeToFirst: false,
         textAlign: TextAlign.left,
         textStyle: TextStyle(
@@ -237,10 +244,10 @@ class _MyHomePageState extends State<MyHomePage> {
     picker.showBottomSheet(context);
   }
 
-  showPickerModal(BuildContext context) async {
+  Future<void> showPickerModal(BuildContext context) async {
     final result = await Picker(
         adapter: PickerDataAdapter<String>(
-            pickerData: JsonDecoder().convert(PickerData)),
+            pickerData: JsonDecoder().convert(pickerData)),
         changeToFirst: true,
         hideHeader: false,
         selectedTextStyle: TextStyle(color: Colors.blue),
@@ -267,7 +274,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print("result: $result"); // ffoldKey.currentState);
   }
 
-  showPickerIcons(BuildContext context) {
+  void showPickerIcons(BuildContext context) {
     Picker(
       adapter: PickerDataAdapter(data: [
         PickerItem(text: Icon(Icons.add), value: Icons.add, children: [
@@ -312,10 +319,10 @@ class _MyHomePageState extends State<MyHomePage> {
     ).showBottomSheet(context);
   }
 
-  showPickerDialog(BuildContext context) {
+  void showPickerDialog(BuildContext context) {
     Picker(
         adapter: PickerDataAdapter<String>(
-            pickerData: JsonDecoder().convert(PickerData)),
+            pickerData: JsonDecoder().convert(pickerData)),
         hideHeader: true,
         title: Text("Select Data"),
         selectedTextStyle: TextStyle(color: Colors.blue),
@@ -325,10 +332,10 @@ class _MyHomePageState extends State<MyHomePage> {
         }).showDialog(context);
   }
 
-  showPickerArray(BuildContext context) {
+  void showPickerArray(BuildContext context) {
     Picker(
         adapter: PickerDataAdapter<String>(
-          pickerData: JsonDecoder().convert(PickerData2),
+          pickerData: JsonDecoder().convert(pickerData2),
           isArray: true,
         ),
         hideHeader: true,
@@ -346,7 +353,7 @@ class _MyHomePageState extends State<MyHomePage> {
         }).showDialog(context);
   }
 
-  showPickerNumber(BuildContext context) {
+  void showPickerNumber(BuildContext context) {
     Picker(
         adapter: NumberPickerAdapter(data: [
           NumberPickerColumn(
@@ -373,7 +380,7 @@ class _MyHomePageState extends State<MyHomePage> {
         }).showDialog(context);
   }
 
-  showPickerNumberFormatValue(BuildContext context) {
+  void showPickerNumberFormatValue(BuildContext context) {
     Picker(
         adapter: NumberPickerAdapter(data: [
           NumberPickerColumn(
@@ -401,7 +408,7 @@ class _MyHomePageState extends State<MyHomePage> {
         }).showDialog(context);
   }
 
-  showPickerDate(BuildContext context) {
+  void showPickerDate(BuildContext context) {
     Picker(
         hideHeader: true,
         adapter: DateTimePickerAdapter(),
@@ -412,7 +419,7 @@ class _MyHomePageState extends State<MyHomePage> {
         }).showDialog(context);
   }
 
-  showPickerDateCustom(BuildContext context) {
+  void showPickerDateCustom(BuildContext context) {
     Picker(
         hideHeader: true,
         adapter: DateTimePickerAdapter(
@@ -425,7 +432,7 @@ class _MyHomePageState extends State<MyHomePage> {
         }).showDialog(context);
   }
 
-  showPickerDateTime(BuildContext context) {
+  void showPickerDateTime(BuildContext context) {
     Picker(
         adapter: DateTimePickerAdapter(
           type: PickerDateTimeType.kMDYHM_AP,
@@ -464,7 +471,7 @@ class _MyHomePageState extends State<MyHomePage> {
         }).showBottomSheet(context);
   }
 
-  showPickerDateRange(BuildContext context) {
+  void showPickerDateRange(BuildContext context) {
     print("canceltext: ${PickerLocalizations.of(context).cancelText}");
 
     Picker ps = Picker(
@@ -503,23 +510,21 @@ class _MyHomePageState extends State<MyHomePage> {
           return AlertDialog(
             title: Text("Select Date Range"),
             actions: actions,
-            content: Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text("Begin:"),
-                  ps.makePicker(),
-                  Text("End:"),
-                  pe.makePicker()
-                ],
-              ),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text("Begin:"),
+                ps.makePicker(),
+                Text("End:"),
+                pe.makePicker()
+              ],
             ),
           );
         });
   }
 
-  showPickerDateTime24(BuildContext context) {
+  void showPickerDateTime24(BuildContext context) {
     Picker(
         adapter: DateTimePickerAdapter(
           type: PickerDateTimeType.kMDYHM,
@@ -544,7 +549,7 @@ class _MyHomePageState extends State<MyHomePage> {
         }).showBottomSheet(context);
   }
 
-  showPickerDateTimeRoundBg(BuildContext context) {
+  void showPickerDateTimeRoundBg(BuildContext context) {
     var picker = Picker(
         backgroundColor: Colors.transparent,
         headerDecoration: BoxDecoration(
@@ -590,7 +595,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  showPickerCustomBuilder(BuildContext context) {
+  void showPickerCustomBuilder(BuildContext context) {
     Picker(
         hideHeader: true,
         adapter: DateTimePickerAdapter(
@@ -610,12 +615,12 @@ class _MyHomePageState extends State<MyHomePage> {
         }).showDialog(context);
   }
 
-  showPickerCustomizeUI(BuildContext context) {
+  void showPickerCustomizeUI(BuildContext context) {
     final itemExtent = 42.0;
     final bgColor = Colors.greenAccent.shade700;
     final txtColor = Colors.white;
     final txtStyle = TextStyle(color: txtColor);
-    final selectColor = Colors.black.withOpacity(0.20);
+    final selectColor = Colors.black.withValues(alpha: 0.20);
     final delimiterChild = Align(
       alignment: Alignment.center,
       child: Container(width: 50, height: itemExtent, color: selectColor),
@@ -625,7 +630,8 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.transparent,
         containerColor: bgColor,
         selectionOverlay: Container(height: itemExtent, color: selectColor),
-        headerDecoration: BoxDecoration(color: Colors.black.withOpacity(0.05)),
+        headerDecoration:
+            BoxDecoration(color: Colors.black.withValues(alpha: 0.05)),
         textStyle: txtStyle,
         cancelTextStyle: txtStyle,
         confirmTextStyle: txtStyle,
@@ -671,7 +677,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }, backgroundColor: Colors.transparent);
   }
 
-  showPickerDurationSelect(BuildContext context) {
+  void showPickerDurationSelect(BuildContext context) {
     final range = <DateTime?>[
       DateTime(0, 1, 1, 8, 30),
       DateTime(0, 1, 1, 14, 30)
@@ -746,7 +752,7 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
-  showPickerSelectYear(BuildContext context) {
+  void showPickerSelectYear(BuildContext context) {
     Picker(
         adapter: DateTimePickerAdapter(
           type: PickerDateTimeType.kY,

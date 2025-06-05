@@ -1,4 +1,4 @@
-const PickerData = '''
+const pickerData = '''
 [
     {
         "a": [
@@ -106,7 +106,7 @@ const PickerData = '''
 ]
     ''';
 
-const PickerData2 = '''
+const pickerData2 = '''
 [
     [
         1,
