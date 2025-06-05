@@ -1149,7 +1149,6 @@ abstract class PickerAdapter<T> {
   /// Returns a widget representing the item.
   Widget buildItem(BuildContext context, int index);
 
-  /// 是否需要更新前面的列
   /// Need to update previous columns
   bool needUpdatePrev(int curIndex) {
     return false;
