@@ -1,5 +1,6 @@
 name: flutter_picker_plus_example
 description: Demonstrates how to use the flutter_picker_plus plugin.
+publish_to: none
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -19,18 +20,16 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  # intl: 0.18.0
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.5
+  cupertino_icons: ^1.0.8
+
+  flutter_picker_plus:
+    path: ../
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  flutter_picker_plus:
-    path: ../
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
