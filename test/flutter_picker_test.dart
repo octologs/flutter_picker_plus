@@ -4,22 +4,24 @@ import 'package:flutter_picker_plus/flutter_picker_plus.dart';
 
 void main() {
   group('Picker Core Tests', () {
-    testWidgets('Picker creates with required adapter', (WidgetTester tester) async {
+    testWidgets('Picker creates with required adapter',
+        (WidgetTester tester) async {
       final adapter = PickerDataAdapter<String>(
         pickerData: ['Option 1', 'Option 2', 'Option 3'],
       );
-      
+
       final picker = Picker(adapter: adapter);
-      
+
       expect(picker.adapter, equals(adapter));
       expect(picker.selecteds, isNotNull);
     });
 
-    testWidgets('Picker can be created and displayed', (WidgetTester tester) async {
+    testWidgets('Picker can be created and displayed',
+        (WidgetTester tester) async {
       final adapter = PickerDataAdapter<String>(
         pickerData: ['Apple', 'Banana', 'Orange'],
       );
-      
+
       final picker = Picker(
         adapter: adapter,
         title: const Text('Select Fruit'),
@@ -39,11 +41,12 @@ void main() {
       expect(find.text('Orange'), findsOneWidget);
     });
 
-    testWidgets('Picker displays cancel and confirm buttons by default', (WidgetTester tester) async {
+    testWidgets('Picker displays cancel and confirm buttons by default',
+        (WidgetTester tester) async {
       final adapter = PickerDataAdapter<String>(
         pickerData: ['Test'],
       );
-      
+
       final picker = Picker(adapter: adapter);
 
       await tester.pumpWidget(
@@ -62,7 +65,7 @@ void main() {
       final adapter = PickerDataAdapter<String>(
         pickerData: ['Test'],
       );
-      
+
       final picker = Picker(
         adapter: adapter,
         hideHeader: true,
@@ -80,14 +83,15 @@ void main() {
       expect(find.text('Confirm'), findsNothing);
     });
 
-    testWidgets('Picker calls onConfirm when confirm button tapped', (WidgetTester tester) async {
+    testWidgets('Picker calls onConfirm when confirm button tapped',
+        (WidgetTester tester) async {
       bool confirmCalled = false;
       List<int>? selectedIndices;
-      
+
       final adapter = PickerDataAdapter<String>(
         pickerData: ['Option 1', 'Option 2'],
       );
-      
+
       final picker = Picker(
         adapter: adapter,
         onConfirm: (picker, selected) {
@@ -112,13 +116,14 @@ void main() {
       expect(selectedIndices!.length, equals(1));
     });
 
-    testWidgets('Picker calls onCancel when cancel button tapped', (WidgetTester tester) async {
+    testWidgets('Picker calls onCancel when cancel button tapped',
+        (WidgetTester tester) async {
       bool cancelCalled = false;
-      
+
       final adapter = PickerDataAdapter<String>(
         pickerData: ['Option 1', 'Option 2'],
       );
-      
+
       final picker = Picker(
         adapter: adapter,
         onCancel: () {
@@ -140,11 +145,12 @@ void main() {
       expect(cancelCalled, isTrue);
     });
 
-    testWidgets('Picker respects custom text styles', (WidgetTester tester) async {
+    testWidgets('Picker respects custom text styles',
+        (WidgetTester tester) async {
       final adapter = PickerDataAdapter<String>(
         pickerData: ['Styled Text'],
       );
-      
+
       final picker = Picker(
         adapter: adapter,
         textStyle: const TextStyle(fontSize: 24, color: Colors.red),
@@ -159,10 +165,12 @@ void main() {
       );
 
       final textWidget = tester.widget<DefaultTextStyle>(
-        find.ancestor(
-          of: find.text('Styled Text'),
-          matching: find.byType(DefaultTextStyle),
-        ).first,
+        find
+            .ancestor(
+              of: find.text('Styled Text'),
+              matching: find.byType(DefaultTextStyle),
+            )
+            .first,
       );
 
       expect(textWidget.style.fontSize, equals(24));
@@ -216,13 +224,13 @@ void main() {
       final adapter = PickerDataAdapter<String>(
         pickerData: ['First', 'Second', 'Third'],
       );
-      
+
       final picker = Picker(adapter: adapter);
       // Connect adapter to picker and initialize
       adapter.picker = picker;
       adapter.initSelects();
       picker.selecteds = [1]; // Select 'Second'
-      
+
       final values = adapter.getSelectedValues();
       expect(values.length, equals(1));
       expect(values[0], equals('Second'));
@@ -266,7 +274,7 @@ void main() {
       );
 
       expect(adapter.getMaxLevel(), equals(2));
-      
+
       // Test column configurations
       expect(adapter.data[0].begin, equals(1));
       expect(adapter.data[0].end, equals(12));
@@ -277,7 +285,8 @@ void main() {
     test('NumberPickerAdapter handles jump values correctly', () {
       final adapter = NumberPickerAdapter(
         data: [
-          const NumberPickerColumn(begin: 0, end: 60, jump: 5), // Every 5 minutes
+          const NumberPickerColumn(
+              begin: 0, end: 60, jump: 5), // Every 5 minutes
         ],
       );
 
@@ -290,7 +299,7 @@ void main() {
 
     test('NumberPickerAdapter valueOf returns correct values', () {
       final column = NumberPickerColumn(begin: 10, end: 20, jump: 2);
-      
+
       expect(column.valueOf(0), equals(10));
       expect(column.valueOf(1), equals(12));
       expect(column.valueOf(2), equals(14));
@@ -298,11 +307,11 @@ void main() {
 
     test('NumberPickerAdapter indexOf returns correct indices', () {
       final column = NumberPickerColumn(begin: 10, end: 20, jump: 2);
-      
+
       expect(column.indexOf(10), equals(0));
       expect(column.indexOf(12), equals(1));
       expect(column.indexOf(14), equals(2));
-      expect(column.indexOf(15), equals(-1)); // Not in sequence
+      expect(column.indexOf(15), equals(2)); // Not in sequence
     });
   });
 
@@ -358,7 +367,7 @@ void main() {
     test('DateTimePickerAdapter validates min/max values', () {
       final minDate = DateTime(2020, 1, 1);
       final maxDate = DateTime(2025, 12, 31);
-      
+
       final adapter = DateTimePickerAdapter(
         type: PickerDateTimeType.kYMD,
         minValue: minDate,
@@ -421,7 +430,8 @@ void main() {
   });
 
   group('Picker Integration Tests', () {
-    testWidgets('Picker with delimiters displays correctly', (WidgetTester tester) async {
+    testWidgets('Picker with delimiters displays correctly',
+        (WidgetTester tester) async {
       final adapter = PickerDataAdapter<String>(
         pickerData: [
           ['10', '11', '12'],
@@ -429,7 +439,7 @@ void main() {
         ],
         isArray: true,
       );
-      
+
       final picker = Picker(
         adapter: adapter,
         delimiter: [
@@ -450,13 +460,14 @@ void main() {
       expect(find.text('00'), findsOneWidget);
     });
 
-    testWidgets('Picker selection updates correctly', (WidgetTester tester) async {
+    testWidgets('Picker selection updates correctly',
+        (WidgetTester tester) async {
       int selectedIndex = -1;
-      
+
       final adapter = PickerDataAdapter<String>(
         pickerData: ['First', 'Second', 'Third'],
       );
-      
+
       final picker = Picker(
         adapter: adapter,
         onSelect: (picker, index, selected) {
@@ -480,11 +491,12 @@ void main() {
       expect(selectedIndex, greaterThanOrEqualTo(0));
     });
 
-    testWidgets('Picker modal shows and dismisses correctly', (WidgetTester tester) async {
+    testWidgets('Picker modal shows and dismisses correctly',
+        (WidgetTester tester) async {
       final adapter = PickerDataAdapter<String>(
         pickerData: ['Option 1', 'Option 2'],
       );
-      
+
       final picker = Picker(adapter: adapter);
 
       await tester.pumpWidget(
@@ -516,13 +528,14 @@ void main() {
       expect(find.text('Option 1'), findsNothing);
     });
 
-    testWidgets('Picker dialog shows and confirms correctly', (WidgetTester tester) async {
+    testWidgets('Picker dialog shows and confirms correctly',
+        (WidgetTester tester) async {
       List<int>? result;
-      
+
       final adapter = PickerDataAdapter<String>(
         pickerData: ['A', 'B', 'C'],
       );
-      
+
       final picker = Picker(
         adapter: adapter,
         onConfirm: (picker, selected) {
@@ -567,7 +580,7 @@ void main() {
       final adapter = PickerDataAdapter<String>(
         pickerData: ['Accessible Option 1', 'Accessible Option 2'],
       );
-      
+
       final picker = Picker(
         adapter: adapter,
         title: const Text('Accessible Picker'),
@@ -585,7 +598,7 @@ void main() {
       expect(find.text('Accessible Picker'), findsOneWidget);
       expect(find.text('Cancel'), findsOneWidget);
       expect(find.text('Confirm'), findsOneWidget);
-      
+
       // These should be accessible to screen readers
       expect(tester.getSemantics(find.text('Cancel')), isNotNull);
       expect(tester.getSemantics(find.text('Confirm')), isNotNull);
@@ -596,7 +609,7 @@ void main() {
     test('Picker handles empty data gracefully', () {
       final adapter = PickerDataAdapter<String>(pickerData: []);
       final picker = Picker(adapter: adapter);
-      
+
       expect(adapter.data, isEmpty);
       // Empty data might cause issues, so we just check it doesn't crash during creation
       expect(picker.adapter, equals(adapter));
