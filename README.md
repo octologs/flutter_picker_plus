@@ -1,268 +1,253 @@
 # flutter_picker_plus
 
-**Note: this plugin is continuous work from [flutter_picker](https://pub.dev/packages/flutter_picker).**
+[![pub package](https://img.shields.io/pub/v/flutter_picker_plus.svg)](https://pub.dev/packages/flutter_picker_plus)
+[![License](https://img.shields.io/github/license/octologs/flutter_picker_plus)](https://github.com/octologs/flutter_picker_plus/blob/main/LICENSE)
 
-Flutter picker plus. Include NumberPicker, DateTimePicker, ArrayPicker, and default linkage Picker. Provide flexible parameters to meet various needs. At the same time, you can extend more functions through custom adapters.
+A powerful and customizable picker widget for Flutter applications. Continuation of the popular [flutter_picker](https://pub.dev/packages/flutter_picker) package with enhanced features and modern Flutter support.
 
-![image](https://github.com/octologs/flutter_picker_plus/blob/main/raw/views.gif?raw=true)
+![Picker Demo](https://github.com/octologs/flutter_picker_plus/blob/main/raw/views.gif?raw=true)
 
-## Supported Languages
+## ✨ Features
 
-- Arabic
-- Bengali
-- Chinese
-- English
-- French
-- German
-- Greek
-- Hindi
-- Indonesian
-- Italian
-- Japanese
-- Korean
-- Portuguese
-- Romanian
-- Russian
-- Spanish
-- Turkish
-- Urdu
-- Javanese
-- Vietnamese
-- Slovenian
+- 🎯 **Multiple Picker Types**: Number, DateTime, Array, and custom data pickers
+- 🌐 **Internationalization**: Support for 20+ languages including RTL languages
+- 🎨 **Highly Customizable**: Flexible styling, colors, and layouts
+- 🔗 **Linkage Support**: Create dependent picker columns
+- 📱 **Multiple Display Modes**: Modal, dialog, and embedded pickers
+- 🎭 **Custom Adapters**: Extend functionality with your own data adapters
+- 🛡️ **Null Safety**: Full null safety support
+- ⚡ **Performance Optimized**: Handles large datasets efficiently
 
-Supporting more than [10+ most spoken languages](https://en.wikipedia.org/wiki/List_of_languages_by_total_number_of_speakers)
+## 🚀 Installation
 
-## How to Use
+Add this to your package's `pubspec.yaml` file:
 
-```dart
-
-    showPicker(BuildContext context) {
-      Picker picker = new Picker(
-        adapter: PickerDataAdapter<String>(pickerdata: new JsonDecoder().convert(PickerData)),
-        changeToFirst: true,
-        textAlign: TextAlign.left,
-        columnPadding: const EdgeInsets.all(8.0),
-        onConfirm: (Picker picker, List value) {
-          print(value.toString());
-          print(picker.getSelectedValues());
-        }
-      );
-      picker.show(_scaffoldKey.currentState);
-    }
-
-    showPickerModal(BuildContext context) {
-      new Picker(
-        adapter: PickerDataAdapter<String>(pickerdata: new JsonDecoder().convert(PickerData)),
-        changeToFirst: true,
-        hideHeader: false,
-        onConfirm: (Picker picker, List value) {
-          print(value.toString());
-          print(picker.adapter.text);
-        }
-      ).showModal(this.context); //_scaffoldKey.currentState);
-    }
-
-    showPickerIcons(BuildContext context) {
-      new Picker(
-        adapter: PickerDataAdapter(data: [
-          new PickerItem(text: Icon(Icons.add), value: Icons.add, children: [
-            new PickerItem(text: Icon(Icons.more)),
-            new PickerItem(text: Icon(Icons.aspect_ratio)),
-            new PickerItem(text: Icon(Icons.android)),
-            new PickerItem(text: Icon(Icons.menu)),
-          ]),
-          new PickerItem(text: Icon(Icons.title), value: Icons.title, children: [
-            new PickerItem(text: Icon(Icons.more_vert)),
-            new PickerItem(text: Icon(Icons.ac_unit)),
-            new PickerItem(text: Icon(Icons.access_alarm)),
-            new PickerItem(text: Icon(Icons.account_balance)),
-          ]),
-          new PickerItem(text: Icon(Icons.face), value: Icons.face, children: [
-            new PickerItem(text: Icon(Icons.add_circle_outline)),
-            new PickerItem(text: Icon(Icons.add_a_photo)),
-            new PickerItem(text: Icon(Icons.access_time)),
-            new PickerItem(text: Icon(Icons.adjust)),
-          ]),
-          new PickerItem(text: Icon(Icons.linear_scale), value: Icons.linear_scale, children: [
-            new PickerItem(text: Icon(Icons.assistant_photo)),
-            new PickerItem(text: Icon(Icons.account_balance)),
-            new PickerItem(text: Icon(Icons.airline_seat_legroom_extra)),
-            new PickerItem(text: Icon(Icons.airport_shuttle)),
-            new PickerItem(text: Icon(Icons.settings_bluetooth)),
-          ]),
-          new PickerItem(text: Icon(Icons.close), value: Icons.close),
-        ]),
-        title: new Text("Select Icon"),
-        onConfirm: (Picker picker, List value) {
-          print(value.toString());
-          print(picker.getSelectedValues());
-        }
-    ).show(_scaffoldKey.currentState);
-  }
-
-  showPickerDialog(BuildContext context) {
-    new Picker(
-        adapter: PickerDataAdapter<String>(pickerdata: new JsonDecoder().convert(PickerData)),
-        hideHeader: true,
-        title: new Text("Select Data"),
-        onConfirm: (Picker picker, List value) {
-          print(value.toString());
-          print(picker.getSelectedValues());
-        }
-    ).showDialog(context);
-  }
-
-  showPickerArray(BuildContext context) {
-    new Picker(
-        adapter: PickerDataAdapter<String>(pickerdata: new JsonDecoder().convert(PickerData2), isArray: true),
-        hideHeader: true,
-        title: new Text("Please Select"),
-        onConfirm: (Picker picker, List value) {
-          print(value.toString());
-          print(picker.getSelectedValues());
-        }
-    ).showDialog(context);
-  }
-
-  showPickerNumber(BuildContext context) {
-    new Picker(
-        adapter: NumberPickerAdapter(data: [
-          NumberPickerColumn(begin: 0, end: 999),
-          NumberPickerColumn(begin: 100, end: 200),
-        ]),
-        delimiter: [
-          PickerDelimiter(child: Container(
-            width: 30.0,
-            alignment: Alignment.center,
-            child: Icon(Icons.more_vert),
-          ))
-        ],
-        hideHeader: true,
-        title: new Text("Please Select"),
-        onConfirm: (Picker picker, List value) {
-          print(value.toString());
-          print(picker.getSelectedValues());
-        }
-    ).showDialog(context);
-  }
-
+```yaml
+dependencies:
+  flutter_picker_plus: ^1.5.2
 ```
 
-## PickerData Example
+## 🌍 Supported Languages
 
-### Array
+Arabic • Bengali • Chinese • English • French • German • Greek • Hindi • Indonesian • Italian • Japanese • Korean • Portuguese • Romanian • Russian • Spanish • Turkish • Urdu • Javanese • Vietnamese • Slovenian
 
-```dart
+> Supporting 20+ languages including the most widely spoken languages worldwide.
 
-const PickerData2 = '''
-[
-    [
-        1,
-        2,
-        3,
-        4
-    ],
-    [
-        11,
-        22,
-        33,
-        44
-    ],
-    [
-        "aaa",
-        "bbb",
-        "ccc"
-    ]
-]
-    ''';
-```
+## 📖 Quick Start
 
-### Linkage
+### Basic String Picker
 
 ```dart
-const PickerData = '''
-[
-    {
-        "a": [
-            {
-                "a1": [
-                    1,
-                    2,
-                    3,
-                    4
-                ]
-            },
-            {
-                "a2": [
-                    5,
-                    6,
-                    7,
-                    8
-                ]
-            },
-            {
-                "a3": [
-                    9,
-                    10,
-                    11,
-                    12
-                ]
-            }
-        ]
+import 'package:flutter_picker_plus/flutter_picker_plus.dart';
+
+void showBasicPicker(BuildContext context) {
+  Picker(
+    adapter: PickerDataAdapter<String>(
+      pickerData: ['Option 1', 'Option 2', 'Option 3']
+    ),
+    title: const Text('Select an Option'),
+    onConfirm: (Picker picker, List<int> value) {
+      print('Selected: ${picker.getSelectedValues()}');
     },
-    {
-        "b": [
-            {
-                "b1": [
-                    11,
-                    22,
-                    33,
-                    44
-                ]
-            },
-            {
-                "b2": [
-                    55,
-                    66,
-                    77,
-                    88
-                ]
-            },
-            {
-                "b3": [
-                    99,
-                    1010,
-                    1111,
-                    1212
-                ]
-            }
-        ]
-    },
-    {
-        "c": [
-            {
-                "c1": [
-                    "a",
-                    "b",
-                    "c"
-                ]
-            },
-            {
-                "c2": [
-                    "aa",
-                    "bb",
-                    "cc"
-                ]
-            },
-            {
-                "c3": [
-                    "aaa",
-                    "bbb",
-                    "ccc"
-                ]
-            }
-        ]
-    }
-]
-    ''';
+  ).showModal(context);
+}
 ```
+
+### Number Picker
+
+```dart
+void showNumberPicker(BuildContext context) {
+  Picker(
+    adapter: NumberPickerAdapter(data: [
+      const NumberPickerColumn(begin: 0, end: 100, jump: 5),
+      const NumberPickerColumn(begin: 0, end: 60),
+    ]),
+    delimiter: [
+      PickerDelimiter(
+        child: Container(
+          width: 30.0,
+          alignment: Alignment.center,
+          child: const Text(':'),
+        ),
+        column: 1,
+      ),
+    ],
+    title: const Text('Select Time'),
+    onConfirm: (Picker picker, List<int> value) {
+      print('Selected: ${picker.getSelectedValues()}');
+    },
+  ).showModal(context);
+}
+```
+
+### Date Time Picker
+
+```dart
+void showDateTimePicker(BuildContext context) {
+  Picker(
+    adapter: DateTimePickerAdapter(
+      type: PickerDateTimeType.kYMDHM,
+      value: DateTime.now(),
+      minValue: DateTime(1950),
+      maxValue: DateTime(2050),
+    ),
+    title: const Text('Select Date & Time'),
+    onConfirm: (Picker picker, List<int> value) {
+      final dateTime = (picker.adapter as DateTimePickerAdapter).value;
+      print('Selected: $dateTime');
+    },
+  ).showModal(context);
+}
+```
+
+## 🎛️ Advanced Usage
+
+### Multi-Column Array Picker
+
+```dart
+void showArrayPicker(BuildContext context) {
+  Picker(
+    adapter: PickerDataAdapter<String>(
+      pickerData: [
+        ['Morning', 'Afternoon', 'Evening'],
+        ['Coffee', 'Tea', 'Juice'],
+        ['Small', 'Medium', 'Large'],
+      ],
+      isArray: true,
+    ),
+    title: const Text('Customize Your Order'),
+    onConfirm: (Picker picker, List<int> value) {
+      print('Selected: ${picker.getSelectedValues()}');
+    },
+  ).showModal(context);
+}
+```
+
+### Hierarchical (Linkage) Picker
+
+```dart
+void showLinkagePicker(BuildContext context) {
+  final data = {
+    'Fruits': {
+      'Citrus': ['Orange', 'Lemon', 'Lime'],
+      'Berries': ['Strawberry', 'Blueberry', 'Raspberry'],
+    },
+    'Vegetables': {
+      'Root': ['Carrot', 'Potato', 'Onion'],
+      'Leafy': ['Lettuce', 'Spinach', 'Kale'],
+    },
+  };
+
+  Picker(
+    adapter: PickerDataAdapter<String>(pickerData: [data]),
+    title: const Text('Select Food Category'),
+    onConfirm: (Picker picker, List<int> value) {
+      print('Selected: ${picker.getSelectedValues()}');
+    },
+  ).showModal(context);
+}
+```
+
+### Custom Styling
+
+```dart
+void showStyledPicker(BuildContext context) {
+  Picker(
+    adapter: PickerDataAdapter<String>(
+      pickerData: ['Red', 'Green', 'Blue', 'Yellow'],
+    ),
+    backgroundColor: Colors.grey.shade100,
+    headerColor: Colors.blue,
+    containerColor: Colors.white,
+    textStyle: const TextStyle(color: Colors.black87, fontSize: 18),
+    cancelTextStyle: const TextStyle(color: Colors.red),
+    confirmTextStyle: const TextStyle(color: Colors.blue),
+    itemExtent: 50.0,
+    diameterRatio: 2.0,
+    title: const Text('Pick a Color'),
+    onConfirm: (Picker picker, List<int> value) {
+      print('Selected: ${picker.getSelectedValues()}');
+    },
+  ).showModal(context);
+}
+```
+
+## 🔧 API Reference
+
+### Picker Class
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `adapter` | `PickerAdapter` | Data adapter for the picker |
+| `title` | `Widget?` | Title widget displayed at the top |
+| `cancelText` | `String?` | Cancel button text (default: localized) |
+| `confirmText` | `String?` | Confirm button text (default: localized) |
+| `backgroundColor` | `Color?` | Background color of the picker |
+| `headerColor` | `Color?` | Header background color |
+| `textStyle` | `TextStyle?` | Style for picker items |
+| `hideHeader` | `bool` | Hide the header buttons (default: false) |
+| `delimiter` | `List<PickerDelimiter>?` | Delimiters between columns |
+
+### Available Adapters
+
+- **`PickerDataAdapter`**: For string/custom data
+- **`NumberPickerAdapter`**: For numeric ranges  
+- **`DateTimePickerAdapter`**: For date and time selection
+
+### Display Methods
+
+- **`showModal(context)`**: Show as modal bottom sheet
+- **`showDialog(context)`**: Show as dialog
+- **`show(state)`**: Show with custom state (deprecated)
+- **`makePicker()`**: Return picker widget for embedding
+
+## 🎨 Customization Options
+
+### Localization
+
+The picker automatically adapts to your app's locale. You can also register custom languages:
+
+```dart
+PickerLocalizations.registerCustomLanguage(
+  'custom',
+  cancelText: 'Cancel',
+  confirmText: 'OK',
+  ampm: ['AM', 'PM'],
+  months: ['Jan', 'Feb', 'Mar', /* ... */],
+);
+```
+
+### Custom Item Builder
+
+```dart
+Picker(
+  adapter: adapter,
+  itemBuilder: (context, text, child, selected, column, index) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      decoration: BoxDecoration(
+        color: selected ? Colors.blue.shade100 : null,
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: child,
+    );
+  },
+  // ... other properties
+)
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+## 📄 License
+
+This project is licensed under the BSD-3-Clause License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+This package is a continuation of the original [flutter_picker](https://pub.dev/packages/flutter_picker) package with additional features and improvements.
+
+---
+
+For more examples and detailed documentation, check out the [example app](https://github.com/octologs/flutter_picker_plus/tree/main/example).
