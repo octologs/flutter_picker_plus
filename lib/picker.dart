@@ -207,12 +207,16 @@ class Picker {
       bool isScrollControlled = false,
       bool useRootNavigator = false,
       Color? backgroundColor,
+      ShapeBorder? shape,
+      Clip? clipBehavior,
       PickerWidgetBuilder? builder}) async {
     return await material.showModalBottomSheet<T>(
         context: context, //state.context,
         isScrollControlled: isScrollControlled,
         useRootNavigator: useRootNavigator,
         backgroundColor: backgroundColor,
+        shape: shape,
+        clipBehavior: clipBehavior,
         builder: (BuildContext context) {
           final picker = makePicker(themeData, true);
           return builder == null ? picker : builder(context, picker);
