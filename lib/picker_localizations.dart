@@ -35,7 +35,7 @@ class PickerLocalizations extends PickerLocalizationsBase {
   /// 注册自定义语言
   ///
   /// Register custom language
-  static registerCustomLanguage(String name,
+  static void registerCustomLanguage(String name,
       {String? cancelText,
       String? confirmText,
       List<String>? ampm,
