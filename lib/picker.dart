@@ -137,7 +137,7 @@ class Picker {
   /// Each index corresponds to the selected item in its respective column.
   /// For example, if [selecteds] is [0, 2, 1], it means:
   /// - Column 0: first item (index 0) is selected
-  /// - Column 1: third item (index 2) is selected  
+  /// - Column 1: third item (index 2) is selected
   /// - Column 2: second item (index 1) is selected
   late List<int> selecteds;
 
@@ -616,7 +616,7 @@ class PickerDelimiter {
   /// The column position where this delimiter should be inserted.
   ///
   /// - Values < 0: Insert at the beginning (before first column)
-  /// - Values >= number of columns: Insert at the end (after last column)  
+  /// - Values >= number of columns: Insert at the end (after last column)
   /// - Other values: Insert at the specified position
   ///
   /// Defaults to 1 (between first and second column).
@@ -682,7 +682,7 @@ class PickerItem<T> {
   ///
   /// Parameters:
   /// * [text] - Widget to display in the picker (optional)
-  /// * [value] - Data value associated with this item (optional) 
+  /// * [value] - Data value associated with this item (optional)
   /// * [children] - Child items for hierarchical structures (optional)
   ///
   /// At least one of [text] or [value] should be provided.
@@ -1076,7 +1076,7 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
 /// implement. Different adapters provide different types of data and behaviors:
 ///
 /// * [PickerDataAdapter] - For array/list based data with hierarchical support
-/// * [NumberPickerAdapter] - For numeric ranges and sequences  
+/// * [NumberPickerAdapter] - For numeric ranges and sequences
 /// * [DateTimePickerAdapter] - For date and time selection
 ///
 /// ## Custom Adapters
@@ -1087,15 +1087,15 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
 /// class MyCustomAdapter extends PickerAdapter<MyDataType> {
 ///   @override
 ///   int getLength() => myData.length;
-///   
+///
 ///   @override
 ///   int getMaxLevel() => 1;
-///   
+///
 ///   @override
 ///   Widget buildItem(BuildContext context, int index) {
 ///     return Text(myData[index].toString());
 ///   }
-///   
+///
 ///   // ... implement other required methods
 /// }
 /// ```
@@ -1327,7 +1327,7 @@ abstract class PickerAdapter<T> {
 ///     ),
 ///     PickerItem<String>(
 ///       text: Row(children: [Icon(Icons.android), Text('Banana')]),
-///       value: 'banana', 
+///       value: 'banana',
 ///     ),
 ///   ],
 /// );

@@ -8,9 +8,9 @@ void main() {
       final adapter = PickerDataAdapter<String>(
         pickerData: ['Option 1', 'Option 2', 'Option 3'],
       );
-      
+
       final picker = Picker(adapter: adapter);
-      
+
       expect(picker.adapter, equals(adapter));
       expect(picker.selecteds, isNotNull);
     });
@@ -74,7 +74,7 @@ void main() {
       final adapter = PickerDataAdapter<String>(
         pickerData: ['Test Option'],
       );
-      
+
       final picker = Picker(adapter: adapter);
 
       await tester.pumpWidget(
@@ -94,7 +94,7 @@ void main() {
       final adapter = PickerDataAdapter<String>(
         pickerData: ['Test Option'],
       );
-      
+
       final picker = Picker(
         adapter: adapter,
         hideHeader: true,
@@ -119,7 +119,7 @@ void main() {
       final adapter = PickerDataAdapter<String>(
         pickerData: ['Option'],
       );
-      
+
       final picker = Picker(
         adapter: adapter,
         onConfirm: (picker, selected) => confirmTapped = true,
@@ -144,7 +144,7 @@ void main() {
       final adapter = PickerDataAdapter<String>(
         pickerData: ['Option'],
       );
-      
+
       final picker = Picker(
         adapter: adapter,
         onCancel: () => cancelTapped = true,
@@ -163,7 +163,8 @@ void main() {
       expect(cancelTapped, isTrue);
     });
 
-    testWidgets('Multi-column picker with delimiters', (WidgetTester tester) async {
+    testWidgets('Multi-column picker with delimiters',
+        (WidgetTester tester) async {
       final adapter = PickerDataAdapter<String>(
         pickerData: [
           ['10', '11', '12'],
@@ -171,7 +172,7 @@ void main() {
         ],
         isArray: true,
       );
-      
+
       final picker = Picker(
         adapter: adapter,
         delimiter: [
@@ -219,11 +220,11 @@ void main() {
       );
 
       expect(adapter.getMaxLevel(), equals(2));
-      
+
       // Test hours (first column is index -1 in setColumn due to internal +1)
       adapter.setColumn(-1);
       expect(adapter.getLength(), equals(24)); // 0 to 23 = 24 items
-      
+
       // Test minutes with 15-minute intervals (second column is index 0)
       adapter.setColumn(0);
       expect(adapter.getLength(), equals(4)); // 0, 15, 30, 45
@@ -231,9 +232,9 @@ void main() {
 
     test('DateTime picker with different types', () {
       final dateTypes = [
-        PickerDateTimeType.kYMD,   // 3 columns
-        PickerDateTimeType.kHM,    // 2 columns
-        PickerDateTimeType.kY,     // 1 column
+        PickerDateTimeType.kYMD, // 3 columns
+        PickerDateTimeType.kHM, // 2 columns
+        PickerDateTimeType.kY, // 1 column
       ];
 
       final expectedColumns = [3, 2, 1];
@@ -243,11 +244,12 @@ void main() {
           type: dateTypes[i],
           value: DateTime(2023, 6, 15, 10, 30),
         );
-        
+
         expect(
           adapter.getMaxLevel(),
           equals(expectedColumns[i]),
-          reason: 'Type ${dateTypes[i]} should have ${expectedColumns[i]} columns',
+          reason:
+              'Type ${dateTypes[i]} should have ${expectedColumns[i]} columns',
         );
       }
     });
@@ -295,7 +297,7 @@ void main() {
   group('Performance Tests', () {
     test('Large dataset handling', () {
       final largeData = List.generate(1000, (i) => 'Item $i');
-      
+
       final stopwatch = Stopwatch()..start();
       final adapter = PickerDataAdapter<String>(pickerData: largeData);
       stopwatch.stop();
