@@ -23,16 +23,19 @@ void main() {
 
     testWidgets('PickerLocalizations works with Chinese locale', (WidgetTester tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          locale: Locale('zh'),
-          localizationsDelegates: [
+        MaterialApp(
+          localizationsDelegates: const [
             PickerLocalizationsDelegate.delegate,
           ],
-          supportedLocales: [
-            Locale('zh'),
-            Locale('en'),
-          ],
-          home: _TestPickerLocalizationsWidget(),
+          home: Builder(
+            builder: (context) {
+              return Localizations.override(
+                context: context,
+                locale: const Locale('zh'),
+                child: const _TestPickerLocalizationsWidget(),
+              );
+            },
+          ),
         ),
       );
 
@@ -46,16 +49,19 @@ void main() {
 
     testWidgets('PickerLocalizations works with Japanese locale', (WidgetTester tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          locale: Locale('ja'),
-          localizationsDelegates: [
+        MaterialApp(
+          localizationsDelegates: const [
             PickerLocalizationsDelegate.delegate,
           ],
-          supportedLocales: [
-            Locale('ja'),
-            Locale('en'),
-          ],
-          home: _TestPickerLocalizationsWidget(),
+          home: Builder(
+            builder: (context) {
+              return Localizations.override(
+                context: context,
+                locale: const Locale('ja'),
+                child: const _TestPickerLocalizationsWidget(),
+              );
+            },
+          ),
         ),
       );
 
@@ -114,16 +120,19 @@ void main() {
 
     testWidgets('Picker uses localized strings in UI', (WidgetTester tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          locale: Locale('zh'),
-          localizationsDelegates: [
+        MaterialApp(
+          localizationsDelegates: const [
             PickerLocalizationsDelegate.delegate,
           ],
-          supportedLocales: [
-            Locale('zh'),
-            Locale('en'),
-          ],
-          home: Scaffold(body: _TestPickerWidget()),
+          home: Builder(
+            builder: (context) {
+              return Localizations.override(
+                context: context,
+                locale: const Locale('zh'),
+                child: const Scaffold(body: _TestPickerWidget()),
+              );
+            },
+          ),
         ),
       );
 
