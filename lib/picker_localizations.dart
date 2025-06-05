@@ -55,7 +55,7 @@ class PickerLocalizations extends PickerLocalizationsBase {
     final defaultValue = localizedValues['en']!;
     final data = {
       'cancelText': cancelText ?? defaultValue['cancelText'] as String,
-      'confirmText': cancelText ?? defaultValue['confirmText'] as String,
+      'confirmText': confirmText ?? defaultValue['confirmText'] as String,
       'ampm': ampm ?? defaultValue['ampm'] as List,
     };
     if (months != null) {
