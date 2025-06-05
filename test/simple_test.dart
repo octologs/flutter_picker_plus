@@ -113,9 +113,8 @@ void main() {
       expect(find.text('Confirm'), findsNothing);
     });
 
-    testWidgets('Picker handles button taps', (WidgetTester tester) async {
+    testWidgets('Picker handles confirm tap', (WidgetTester tester) async {
       bool confirmTapped = false;
-      bool cancelTapped = false;
 
       final adapter = PickerDataAdapter<String>(
         pickerData: ['Option'],
@@ -124,6 +123,30 @@ void main() {
       final picker = Picker(
         adapter: adapter,
         onConfirm: (picker, selected) => confirmTapped = true,
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: picker.makePicker(),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Confirm'));
+      await tester.pumpAndSettle();
+      expect(confirmTapped, isTrue);
+    });
+
+    testWidgets('Picker handles cancel tap', (WidgetTester tester) async {
+      bool cancelTapped = false;
+
+      final adapter = PickerDataAdapter<String>(
+        pickerData: ['Option'],
+      );
+      
+      final picker = Picker(
+        adapter: adapter,
         onCancel: () => cancelTapped = true,
       );
 
@@ -135,16 +158,9 @@ void main() {
         ),
       );
 
-      // Test cancel
       await tester.tap(find.text('Cancel'));
       await tester.pumpAndSettle();
       expect(cancelTapped, isTrue);
-
-      // Reset and test confirm
-      cancelTapped = false;
-      await tester.tap(find.text('Confirm'));
-      await tester.pumpAndSettle();
-      expect(confirmTapped, isTrue);
     });
 
     testWidgets('Multi-column picker with delimiters', (WidgetTester tester) async {
@@ -204,12 +220,12 @@ void main() {
 
       expect(adapter.getMaxLevel(), equals(2));
       
-      // Test hours
-      adapter.setColumn(0);
-      expect(adapter.getLength(), equals(24));
+      // Test hours (first column is index -1 in setColumn due to internal +1)
+      adapter.setColumn(-1);
+      expect(adapter.getLength(), equals(24)); // 0 to 23 = 24 items
       
-      // Test minutes with 15-minute intervals
-      adapter.setColumn(1);
+      // Test minutes with 15-minute intervals (second column is index 0)
+      adapter.setColumn(0);
       expect(adapter.getLength(), equals(4)); // 0, 15, 30, 45
     });
 
