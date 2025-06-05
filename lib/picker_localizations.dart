@@ -32,8 +32,6 @@ class PickerLocalizations extends PickerLocalizationsBase {
         _static;
   }
 
-  /// 注册自定义语言
-  ///
   /// Register custom language
   static void registerCustomLanguage(String name,
       {String? cancelText,

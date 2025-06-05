@@ -158,8 +158,6 @@ class Picker {
   PickerWidgetState? get state => _state;
   int _maxLevel = 1;
 
-  /// 生成picker控件
-  ///
   /// Build picker control
   Widget makePicker(
       [material.ThemeData? themeData, bool isModal = false, Key? key]) {
@@ -274,20 +272,19 @@ class Picker {
         });
   }
 
-  /// 获取当前选择的值
   /// Get the value of the current selection
   List getSelectedValues() {
     return adapter.getSelectedValues();
   }
 
-  /// 取消
+  /// Cancel
   void doCancel(BuildContext context) {
     Navigator.of(context).pop<List<int>>(null);
     if (onCancel != null) onCancel!();
     _widget = null;
   }
 
-  /// 确定
+  /// Confirm
   void doConfirm(BuildContext context) async {
     if (onConfirmBefore != null && !(await onConfirmBefore!(this, selecteds))) {
       return; // Cancel;
@@ -299,8 +296,8 @@ class Picker {
     _widget = null;
   }
 
-  /// 弹制更新指定列的内容
-  /// 当 onSelect 事件中，修改了当前列前面的列的内容时，可以调用此方法来更新显示
+  /// Force update the content of specified column
+  /// When modifying the content of columns before the current column in the onSelect event, this method can be called to update the display
   void updateColumn(int index, [bool all = false]) {
     if (all) {
       _state?.update();
@@ -323,7 +320,7 @@ class Picker {
           padding: theme?.padding);
 }
 
-/// 分隔符
+/// Delimiter
 class PickerDelimiter {
   final Widget? child;
   final int column;
@@ -332,13 +329,13 @@ class PickerDelimiter {
 
 /// picker data list item
 class PickerItem<T> {
-  /// 显示内容
+  /// Display content
   final Widget? text;
 
-  /// 数据值
+  /// Data value
   final T? value;
 
-  /// 子项
+  /// Child items
   final List<PickerItem<T>>? children;
 
   PickerItem({this.text, this.value, this.children});
@@ -576,7 +573,7 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
                       // ignore: avoid_print
                       if (picker.printDebug) print("builder. col: $i");
 
-                      // 上一次是空列表
+                      // Last time was empty list
                       final lastIsEmpty = scrollController[i].hasClients &&
                           !scrollController[i].position.hasContentDimensions;
 
@@ -725,7 +722,7 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
   }
 }
 
-/// 选择器数据适配器
+/// Picker data adapter
 abstract class PickerAdapter<T> {
   Picker? picker;
 
@@ -836,7 +833,7 @@ abstract class PickerAdapter<T> {
 
   String get text => getText();
 
-  // 是否联动，即后面的列受前面列数据影响
+  // Whether linked, i.e., subsequent columns are affected by data in previous columns
   bool get isLinkage => getIsLinkage();
 
   @override
@@ -848,7 +845,7 @@ abstract class PickerAdapter<T> {
     return true;
   }
 
-  /// 通知适配器数据改变
+  /// Notify adapter of data changes
   void notifyDataChanged() {
     if (picker?.state != null) {
       picker!.adapter.doShow();
@@ -860,7 +857,7 @@ abstract class PickerAdapter<T> {
   }
 }
 
-/// 数据适配器
+/// Data adapter
 class PickerDataAdapter<T> extends PickerAdapter<T> {
   late List<PickerItem<T>> data;
   List<PickerItem<dynamic>>? _datas;
@@ -962,7 +959,7 @@ class PickerDataAdapter<T> extends PickerAdapter<T> {
       _datas = data;
     } else {
       _datas = data;
-      // 列数过多会有性能问题
+      // Too many columns will have performance issues
       for (int i = 0; i <= index; i++) {
         var j = picker!.selecteds[i];
         if (_datas != null && _datas!.length > j) {
@@ -1425,7 +1422,7 @@ class DateTimePickerAdapter extends PickerAdapter<DateTime> {
 
   // static const List<int> leapYearMonths = const <int>[1, 3, 5, 7, 8, 10, 12];
 
-  // 获取当前列的类型
+  // Get the type of current column
   int getColumnType(int index) {
     if (customColumnType != null) return customColumnType![index];
     List<int> items = columnType[type];
@@ -1433,7 +1430,7 @@ class DateTimePickerAdapter extends PickerAdapter<DateTime> {
     return items[index];
   }
 
-  // 判断是否存在秒
+  // Check if seconds exist
   bool existSec() {
     final columns =
         customColumnType == null ? columnType[type] : customColumnType!;
@@ -1667,7 +1664,7 @@ class DateTimePickerAdapter extends PickerAdapter<DateTime> {
             picker!.selecteds[i] = value!.minute ~/ minuteInterval!;
             final m = picker!.selecteds[i] * minuteInterval!;
             if (m != value!.minute) {
-              // 需要更新 value
+              // Need to update value
               var s = value!.second;
               if (type != 2 && type != 6) s = 0;
               final h = _colAP >= 0 ? _calcHourOfAMPM(sh, m) : sh;
