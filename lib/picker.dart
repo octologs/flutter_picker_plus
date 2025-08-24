@@ -1187,10 +1187,28 @@ abstract class PickerAdapter<T> {
   Widget makeTextEx(
       Widget? child, String text, Widget? postfix, Widget? suffix, bool isSel) {
     List<Widget> items = [];
-    if (postfix != null) items.add(postfix);
-    items.add(
-        child ?? Text(text, style: (isSel ? picker!.selectedTextStyle : null)));
-    if (suffix != null) items.add(suffix);
+    if (postfix != null) {
+      if (postfix is Text) {
+        final styledPostfix = _styleTextWidget(postfix);
+        items.add(styledPostfix);
+      } else {
+        items.add(postfix);
+      }
+    }
+    items.add(child ??
+        Text(
+          text,
+          style: (isSel ? picker!.selectedTextStyle : null),
+          textScaler: picker!.textScaler,
+        ));
+    if (suffix != null) {
+      if (suffix is Text) {
+        final styledSuffix = _styleTextWidget(suffix);
+        items.add(styledSuffix);
+      } else {
+        items.add(suffix);
+      }
+    }
     final theme = picker!.textStyle != null || picker!.state?.context == null
         ? null
         : material.Theme.of(picker!.state!.context);
@@ -1222,6 +1240,28 @@ abstract class PickerAdapter<T> {
             child: Wrap(
               children: items,
             )));
+  }
+
+  /// Applies the text style and the text scaler of the picker (if available) to a text widget.
+  Text _styleTextWidget(final Text text) {
+    return Text(
+      text.data ?? "",
+      style: text.style ?? picker?.textStyle,
+      textScaler: text.textScaler ?? picker?.textScaler,
+      textAlign: text.textAlign,
+      maxLines: text.maxLines,
+      overflow: text.overflow,
+      softWrap: text.softWrap,
+      textDirection: text.textDirection,
+      locale: text.locale,
+      strutStyle: text.strutStyle,
+      textWidthBasis: text.textWidthBasis,
+      textHeightBehavior: text.textHeightBehavior,
+      semanticsLabel: text.semanticsLabel,
+      selectionColor: text.selectionColor,
+      semanticsIdentifier: text.semanticsIdentifier,
+      key: text.key,
+    );
   }
 
   String getText() {
