@@ -1,3 +1,7 @@
+## 1.5.3 - 2025.08.24
+
+* [bugfix] Text scaling not considered correct if postfix or suffix is set (thanks to [Limatationz](https://github.com/octologs/flutter_picker_plus/pull/16))
+
 ## 1.5.2 - 2025.06.05
 
 * [feature] Added shape and clipBehavior parameters to showModalBottomSheet (thanks to [brettpappas](https://github.com/octologs/flutter_picker_plus/pull/12))
