@@ -1,3 +1,8 @@
+## 1.5.4 - 2025.08.26
+
+* [bugfix] Android example build issues fixed
+* [bugfix] Minimume flutter version 3.32 added to README.md
+
 ## 1.5.3 - 2025.08.24
 
 * [bugfix] Text scaling not considered correct if postfix or suffix is set (thanks to [Limatationz](https://github.com/octologs/flutter_picker_plus/pull/16))
