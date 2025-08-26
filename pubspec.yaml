@@ -1,6 +1,6 @@
 name: flutter_picker_plus
 description: Provide flexible parameters to meet various needs with NumberPicker, DateTimePicker, ArrayPicker, and default linkage Picker.
-version: 1.5.3
+version: 1.5.4
 homepage: https://github.com/octologs/flutter_picker_plus
 
 environment:

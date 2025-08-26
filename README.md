@@ -27,6 +27,13 @@ dependencies:
   flutter_picker_plus: ^1.5.3
 ```
 
+## 📋 Requirements
+
+- **Flutter**: 3.32.0 or higher
+- **Dart**: 3.0.0 or higher
+
+For Flutter version history and migration guides, see the [Flutter Release Notes](https://docs.flutter.dev/release/release-notes).
+
 ## 🌍 Supported Languages
 
 Arabic • Bengali • Chinese • English • French • German • Greek • Hindi • Indonesian • Italian • Japanese • Korean • Portuguese • Romanian • Russian • Spanish • Turkish • Urdu • Javanese • Vietnamese • Slovenian
