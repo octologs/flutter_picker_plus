@@ -24,7 +24,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flutter_picker_plus: ^1.5.3
+  flutter_picker_plus: ^1.5.5
 ```
 
 ## 📋 Requirements

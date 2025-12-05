@@ -1,3 +1,7 @@
+## 1.5.5 - 2025.12.05
+
+* [bugfix] Hierarchical (Linkage) Picker was not working. Thanks to [onestow](https://github.com/octologs/flutter_picker_plus/pull/22)
+
 ## 1.5.4 - 2025.08.26
 
 * [bugfix] Android example build issues fixed
