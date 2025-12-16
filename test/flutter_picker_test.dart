@@ -632,4 +632,330 @@ void main() {
       );
     });
   });
+
+  // Tests for PR #22: Fix 3+ layer nested map parsing in _parsePickerDataItem
+  // https://github.com/octologs/flutter_picker_plus/pull/22
+  // Fixes issue #21: Hierarchical (Linkage) Picker show nothing for 3+ layers
+  group('PR #22 - Deep Hierarchical Map Tests', () {
+    test('PickerDataAdapter parses 3-layer nested map correctly', () {
+      // This is the exact use case from issue #21 - 3 layer hierarchical data
+      // Country -> State -> City
+      final adapter = PickerDataAdapter<String>(
+        pickerData: [
+          {
+            'United States': {
+              'California': ['Los Angeles', 'San Francisco', 'San Diego'],
+              'Texas': ['Houston', 'Dallas', 'Austin'],
+            },
+            'Canada': {
+              'Ontario': ['Toronto', 'Ottawa'],
+              'Quebec': ['Montreal', 'Quebec City'],
+            },
+          }
+        ],
+      );
+
+      // Verify top level - should have 2 countries
+      expect(adapter.data.length, equals(2));
+      expect(adapter.data[0].value, equals('United States'));
+      expect(adapter.data[1].value, equals('Canada'));
+
+      // Verify second level - United States should have 2 states
+      expect(adapter.data[0].children, isNotNull);
+      expect(adapter.data[0].children!.length, equals(2));
+      expect(adapter.data[0].children![0].value, equals('California'));
+      expect(adapter.data[0].children![1].value, equals('Texas'));
+
+      // Verify third level - California should have 3 cities
+      expect(adapter.data[0].children![0].children, isNotNull);
+      expect(adapter.data[0].children![0].children!.length, equals(3));
+      expect(adapter.data[0].children![0].children![0].value,
+          equals('Los Angeles'));
+      expect(adapter.data[0].children![0].children![1].value,
+          equals('San Francisco'));
+      expect(
+          adapter.data[0].children![0].children![2].value, equals('San Diego'));
+
+      // Verify Texas also has correct cities
+      expect(adapter.data[0].children![1].children, isNotNull);
+      expect(adapter.data[0].children![1].children!.length, equals(3));
+      expect(
+          adapter.data[0].children![1].children![0].value, equals('Houston'));
+
+      // Verify maxLevel is 3 (country, state, city)
+      expect(adapter.getMaxLevel(), equals(3));
+    });
+
+    test('PickerDataAdapter getSelectedValues works for 3-layer data', () {
+      final adapter = PickerDataAdapter<String>(
+        pickerData: [
+          {
+            'Province1': {
+              'City1': ['District1', 'District2'],
+              'City2': ['District3', 'District4'],
+            },
+            'Province2': {
+              'City3': ['District5', 'District6'],
+            },
+          }
+        ],
+      );
+
+      final picker = Picker(adapter: adapter);
+      adapter.picker = picker;
+      // Must call getMaxLevel() first to calculate _maxLevel before initSelects()
+      // This mimics what makePicker() does internally
+      final maxLevel = adapter.getMaxLevel();
+      expect(maxLevel, equals(3));
+      adapter.initSelects();
+
+      // Default selection should be [0, 0, 0] - first item at each level
+      expect(picker.selecteds.length, equals(3));
+      expect(picker.selecteds[0], equals(0));
+      expect(picker.selecteds[1], equals(0));
+      expect(picker.selecteds[2], equals(0));
+
+      // getSelectedValues should return Province1, City1, District1
+      final values = adapter.getSelectedValues();
+      expect(values.length, equals(3));
+      expect(values[0], equals('Province1'));
+      expect(values[1], equals('City1'));
+      expect(values[2], equals('District1'));
+
+      // Change selection to second province, first city, second district
+      picker.selecteds = [1, 0, 1];
+      final values2 = adapter.getSelectedValues();
+      expect(values2.length, equals(3));
+      expect(values2[0], equals('Province2'));
+      expect(values2[1], equals('City3'));
+      expect(values2[2], equals('District6'));
+    });
+
+    test('PickerDataAdapter handles 4-layer nested map correctly', () {
+      // Even deeper nesting to ensure the fix is robust
+      // Continent -> Country -> State -> City
+      final adapter = PickerDataAdapter<String>(
+        pickerData: [
+          {
+            'North America': {
+              'United States': {
+                'California': ['Los Angeles', 'San Francisco'],
+              },
+            },
+            'Europe': {
+              'Germany': {
+                'Bavaria': ['Munich', 'Nuremberg'],
+              },
+            },
+          }
+        ],
+      );
+
+      // Verify 4 levels exist
+      expect(adapter.getMaxLevel(), equals(4));
+      expect(adapter.data.length, equals(2));
+
+      // Verify all levels are correctly parsed
+      expect(adapter.data[0].value, equals('North America'));
+      expect(adapter.data[0].children![0].value, equals('United States'));
+      expect(adapter.data[0].children![0].children![0].value,
+          equals('California'));
+      expect(adapter.data[0].children![0].children![0].children![0].value,
+          equals('Los Angeles'));
+    });
+
+    test('PickerDataAdapter handles mixed map and list at different levels',
+        () {
+      // This tests the condition: (o is List || o is Map) && o.isNotEmpty
+      final adapter = PickerDataAdapter<String>(
+        pickerData: [
+          {
+            'Category1': {
+              'SubCategory1': ['Item1', 'Item2'], // Map -> Map -> List
+            },
+            'Category2': [
+              'DirectItem1',
+              'DirectItem2'
+            ], // Map -> List (2 levels)
+          }
+        ],
+      );
+
+      expect(adapter.data.length, equals(2));
+      expect(adapter.data[0].value, equals('Category1'));
+      expect(adapter.data[1].value, equals('Category2'));
+
+      // Category1 has nested map, so it has children with children
+      expect(adapter.data[0].children, isNotNull);
+      expect(adapter.data[0].children![0].value, equals('SubCategory1'));
+      expect(adapter.data[0].children![0].children, isNotNull);
+      expect(adapter.data[0].children![0].children!.length, equals(2));
+
+      // Category2 has direct list, so it has children but no grandchildren
+      expect(adapter.data[1].children, isNotNull);
+      expect(adapter.data[1].children!.length, equals(2));
+      expect(adapter.data[1].children![0].value, equals('DirectItem1'));
+      expect(adapter.data[1].children![0].children, isNull);
+    });
+
+    testWidgets('Picker with 3-layer data displays all columns',
+        (WidgetTester tester) async {
+      final adapter = PickerDataAdapter<String>(
+        pickerData: [
+          {
+            'Province1': {
+              'City1': ['District1', 'District2'],
+            },
+          }
+        ],
+      );
+
+      final picker = Picker(
+        adapter: adapter,
+        title: const Text('Select Location'),
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: picker.makePicker(),
+          ),
+        ),
+      );
+
+      // Verify title is displayed
+      expect(find.text('Select Location'), findsOneWidget);
+
+      // Verify first column (province) item is displayed
+      expect(find.text('Province1'), findsOneWidget);
+
+      // Verify second column (city) item is displayed
+      expect(find.text('City1'), findsOneWidget);
+
+      // Verify third column (district) items are displayed
+      expect(find.text('District1'), findsOneWidget);
+      expect(find.text('District2'), findsOneWidget);
+    });
+
+    testWidgets('Picker modal with 3-layer data works correctly',
+        (WidgetTester tester) async {
+      List<int>? selectedIndices;
+      Picker? confirmedPicker;
+
+      final adapter = PickerDataAdapter<String>(
+        pickerData: [
+          {
+            'Level1A': {
+              'Level2A': ['Level3A', 'Level3B'],
+            },
+          }
+        ],
+      );
+
+      final picker = Picker(
+        adapter: adapter,
+        onConfirm: (p, selected) {
+          confirmedPicker = p;
+          selectedIndices = selected;
+        },
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => picker.showModal(context),
+                child: const Text('Show Picker'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      // Show the picker
+      await tester.tap(find.text('Show Picker'));
+      await tester.pumpAndSettle();
+
+      // Verify picker is shown with 3-layer data
+      expect(find.text('Level1A'), findsOneWidget);
+      expect(find.text('Level2A'), findsOneWidget);
+      expect(find.text('Level3A'), findsOneWidget);
+
+      // Confirm selection
+      await tester.tap(find.text('Confirm'));
+      await tester.pumpAndSettle();
+
+      // Verify callback was called with correct indices
+      expect(selectedIndices, isNotNull);
+      expect(selectedIndices!.length, equals(3));
+      expect(selectedIndices![0], equals(0)); // Level1A
+      expect(selectedIndices![1], equals(0)); // Level2A
+      expect(selectedIndices![2], equals(0)); // Level3A
+
+      // Verify selected values
+      final values = confirmedPicker!.getSelectedValues();
+      expect(values[0], equals('Level1A'));
+      expect(values[1], equals('Level2A'));
+      expect(values[2], equals('Level3A'));
+    });
+
+    test('PickerDataAdapter handles empty nested maps gracefully', () {
+      final adapter = PickerDataAdapter<String>(
+        pickerData: [
+          {
+            'NonEmpty': {
+              'SubItem': ['Value1'],
+            },
+            'EmptyMap': <String, dynamic>{}, // Empty nested map
+          }
+        ],
+      );
+
+      // Should only parse non-empty items
+      expect(adapter.data.length, equals(1));
+      expect(adapter.data[0].value, equals('NonEmpty'));
+    });
+
+    test('Regression test: Issue #21 exact reproduction', () {
+      // This reproduces the bug from issue #21 that was failing
+      // Before PR #22, this would result in empty picker body
+      // Original issue used Chinese location data, here we use English equivalent
+      final pickerData = [
+        {
+          'California': {
+            'Los Angeles': ['Downtown', 'Hollywood', 'Venice'],
+            'San Francisco': ['Mission', 'Marina', 'SOMA'],
+          },
+          'New York': {
+            'New York City': ['Manhattan', 'Brooklyn'],
+            'Buffalo': ['Downtown', 'Elmwood'],
+          },
+        }
+      ];
+
+      final adapter = PickerDataAdapter<String>(pickerData: pickerData);
+
+      // This should NOT be empty (was the bug in issue #21)
+      expect(adapter.data, isNotEmpty);
+      expect(adapter.data.length, equals(2));
+
+      // Verify the hierarchical structure is correctly parsed
+      expect(adapter.getMaxLevel(), equals(3));
+
+      // Verify first state
+      expect(adapter.data[0].value, equals('California'));
+      expect(adapter.data[0].children, isNotNull);
+      expect(adapter.data[0].children!.length, equals(2));
+
+      // Verify first city under first state
+      expect(adapter.data[0].children![0].value, equals('Los Angeles'));
+      expect(adapter.data[0].children![0].children, isNotNull);
+      expect(adapter.data[0].children![0].children!.length, equals(3));
+
+      // Verify districts
+      expect(
+          adapter.data[0].children![0].children![0].value, equals('Downtown'));
+    });
+  });
 }
