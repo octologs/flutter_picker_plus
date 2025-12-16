@@ -1440,16 +1440,14 @@ class PickerDataAdapter<T> extends PickerAdapter<T> {
         List<T> mapList = map.keys.toList().cast();
         for (int j = 0; j < mapList.length; j++) {
           var o = map[mapList[j]];
-          if (o is List && o.isNotEmpty) {
+          if ((o is List || o is Map) && o.isNotEmpty) {
             List<PickerItem<T>> children = <PickerItem<T>>[];
-            //print('add: ${data.runtimeType.toString()}');
             data.add(PickerItem<T>(value: mapList[j], children: children));
-            _parsePickerDataItem(o, children);
+            _parsePickerDataItem(o is Map ? [o] : o, children);
           }
         }
       } else if (T == String && item is! List) {
         String v = item.toString();
-        //print('add: $_v');
         data.add(PickerItem<T>(value: v as T));
       }
     }
