@@ -1,3 +1,7 @@
+## 1.5.6 - 2025.12.19
+
+* [bugfix] Fix `selectedTextStyle` not being applied to the selected item when scrolling to February or changing year while on February in day-month-year (DMY) layouts. Thanks to [@lvtao951117](https://github.com/octologs/flutter_picker_plus/issues/24)
+
 ## 1.5.5 - 2025.12.05
 
 * [bugfix] Hierarchical (Linkage) Picker was not working. Thanks to [onestow](https://github.com/octologs/flutter_picker_plus/pull/22)
@@ -5,7 +9,7 @@
 ## 1.5.4 - 2025.08.26
 
 * [bugfix] Android example build issues fixed
-* [bugfix] Minimume flutter version 3.32 added to README.md
+* [bugfix] Minimum Flutter version 3.32 added to README.md
 
 ## 1.5.3 - 2025.08.24
 

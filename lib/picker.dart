@@ -1034,7 +1034,8 @@ class PickerWidgetState<T> extends State<_PickerWidget> {
               _keys[j]!(() {});
             }
           }
-          // setState(() {});
+          // Also rebuild the current column to apply selectedTextStyle
+          if (_keys[i] != null) _keys[i]!(() {});
         } else {
           if (_keys[i] != null) _keys[i]!(() {});
           if (adapter.isLinkage) {
