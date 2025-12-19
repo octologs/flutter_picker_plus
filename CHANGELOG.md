@@ -1,6 +1,6 @@
 ## 1.5.6 - 2025.12.19
 
-* [bugfix] Fix `selectedTextStyle` not being applied to the selected item when scrolling to February or changing year while on February in day-month-year (DMY) layouts. Thanks to [@lvtao951117](https://github.com/octologs/flutter_picker_plus/issues/24)
+* [bugfix] Fix `selectedTextStyle` not being applied to the selected item when scrolling to February or changing year while on February in day-month-year (DMY) layouts. Thanks to [lvtao951117](https://github.com/octologs/flutter_picker_plus/issues/24)
 
 ## 1.5.5 - 2025.12.05
 
