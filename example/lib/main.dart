@@ -4,8 +4,7 @@ import 'dart:io';
 import 'dart:ui';
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_picker_plus/flutter_picker_plus.dart';
 
 import './picker_test.dart';
@@ -44,11 +43,9 @@ class MyAppState extends State<MyApp> {
         ),
         scrollBehavior: const MaterialScrollBehavior()
             .copyWith(scrollbars: true, dragDevices: _kTouchLikeDeviceTypes),
-        localizationsDelegates: [
+        localizationsDelegates: const [
           PickerLocalizationsDelegate.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
+          ...GlobalMaterialLocalizations.delegates,
         ],
         supportedLocales: [
           const Locale('en'),
