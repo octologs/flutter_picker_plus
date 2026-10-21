@@ -1,30 +1,37 @@
-// This is a basic Flutter widget test.
+// Smoke test for the flutter_picker_plus example app.
 //
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// The example is a picker demo (not the `flutter create` counter template),
+// so the assertions below are written against its real UI: an AppBar titled
+// "Picker", a list of demo entries, and a "+" action that opens RawPickerTest.
 
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_picker_plus_example/main.dart';
+import 'package:flutter_picker_plus_example/picker_test.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('Example app renders the picker demo list',
+      (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp());
+    await tester.pumpAndSettle();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(find.byType(AppBar), findsOneWidget);
+    expect(find.textContaining('Picker'), findsWidgets);
+    expect(find.text('1. Picker Show'), findsOneWidget);
+    expect(find.byType(ListTile), findsWidgets);
+  });
 
-    // Tap the '+' icon and trigger a frame.
+  testWidgets('Tapping the + action opens RawPickerTest',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp());
+    await tester.pumpAndSettle();
+
+    expect(find.byType(RawPickerTest), findsNothing);
+
     await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.byType(RawPickerTest), findsOneWidget);
   });
 }
